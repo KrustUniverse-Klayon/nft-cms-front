@@ -1,6 +1,38 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 
+// https://coreui.io/react/demo/free/3.1.1/#/dashboard
+
+const _nav =  [
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['NFT 심사']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: '심사대기',
+    to: '/nft/waiting',
+    icon: 'cil-pencil',
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: '심사완료',
+    to: '/nft/approved',
+    icon: 'cil-cursor',
+  },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['Market']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: '1차 등록',
+    to: '/market/upload',
+    icon: 'cil-pencil',
+  },
+]
+
+/*
 const _nav =  [
   {
     _tag: 'CSidebarNavItem',
@@ -308,5 +340,6 @@ const _nav =  [
     className: 'm-2'
   }
 ]
+*/
 
 export default _nav
