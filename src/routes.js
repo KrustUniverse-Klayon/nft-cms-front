@@ -38,15 +38,15 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'));
 const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 
-const MarketUpload = React.lazy(() => import('./views/market/Upload'));
+const MarketProducts = React.lazy(() => import('./views/market/Products'));
 const NFTWaiting = React.lazy(() => import('./views/nft/Waiting'));
 const NFTApproved = React.lazy(() => import('./views/nft/Approved'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/market/upload', name: 'MarketUpload', component: MarketUpload },
-  { path: '/nft/waiting', name: 'NFTWaiting', component: NFTWaiting },
-  { path: '/nft/approved', name: 'NFTApproved', component: NFTApproved },
+  { path: '/market/products', name: 'Market Products', component: MarketProducts },
+  { path: '/nft/waiting', name: 'NFT Waiting', component: NFTWaiting },
+  { path: '/nft/approved', name: 'NFT Approved', component: NFTApproved },
 
 
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },

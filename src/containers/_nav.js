@@ -16,7 +16,7 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: '심사완료',
+    name: '상품등록',
     to: '/nft/approved',
     icon: 'cil-cursor',
   },
@@ -26,8 +26,8 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: '1차 등록',
-    to: '/market/upload',
+    name: '등록된 상품',
+    to: '/market/products',
     icon: 'cil-pencil',
   },
 ]

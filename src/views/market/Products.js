@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
 
 import {
   CBadge, CButton,
@@ -26,7 +25,8 @@ const getBadge = status => {
     default: return 'primary'
   }
 }
-const fields = ['id', 'name', 'description', 'image_url', 'status']
+const fields = ['product_id','name', 'image_url', 'price', 'currency',
+                'sale_method', 'sale_begin_at', 'sale_end_at']
 
 
 
@@ -50,7 +50,7 @@ const Tables = () => {
       setItems(null);
       // loading 상태를 true 로 바꿉니다.
       setLoading(true);
-      const response = await apiGet('/papi/v1/templates?status=wait')
+      const response = await apiGet('/papi/v1/products')
       setItems(response.data.data); // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
@@ -58,20 +58,6 @@ const Tables = () => {
     setLoading(false)
   }
 
-  const approveNFT = itemId => {
-    apiPatch(`/papi/v1/templates/${itemId}/approve`)
-      .then(response => {
-        console.log('approved')
-        fetchItems();
-      })
-      .catch(error => {
-        if (!error.response && error.request) {
-          // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-          console.log('요청이 실패했습니다.');
-        }
-      })
-    setModal(false)
-  }
 
   useEffect(() => {
     fetchItems();
@@ -106,34 +92,25 @@ const Tables = () => {
                   'image_url':
                     (item)=>(
                       <td>
-                        <img src={item.image_url} width='50px' height='50px' ></img>
+                        <img src={item.image_url} width='50px' height='50px' alt='' />
+                      </td>
+                    ),
+                  'sale_begin_at':
+                    (item)=>(
+                      <td>
+                        {item.sale_begin_at.slice(0, 10)}
+                      </td>
+                    ),
+                  'sale_end_at':
+                    (item)=>(
+                      <td>
+                        {item.sale_end_at.slice(0, 10)}
                       </td>
                     ),
 
                 }}
               />
 
-
-              <CModal
-                show={modal}
-                onClose={setModal}
-              >
-                <CModalHeader closeButton>
-                  <CModalTitle>심사 승인</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                  Id {approveItemId} 카드 발행을 승인합니다.
-                </CModalBody>
-                <CModalFooter>
-                  <CButton
-                    onClick={() => approveNFT(`${approveItemId}`)}
-                    color="primary">Approve</CButton>
-                  <CButton
-                    color="secondary"
-                    onClick={() => setModal(false)}
-                  >Cancel</CButton>
-                </CModalFooter>
-              </CModal>
 
             </CCardBody>
           </CCard>
