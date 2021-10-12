@@ -16,4 +16,4 @@ Dependencies are handled by **npm**.
 
 ## See also
 [Create-React-App](CRA.md)
-[Readme](./README.md)
+[Readme](./README.CoreUI.md)
