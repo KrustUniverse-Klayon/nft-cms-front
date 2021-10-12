@@ -30,6 +30,16 @@ const _nav =  [
     to: '/market/products',
     icon: 'cil-pencil',
   },
+  {
+    _tag: 'CSidebarNavTitle',
+    _children: ['User']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: '유저 NFT 지갑',
+    to: '/user/nfts',
+    icon: 'cil-pencil',
+  },
 ]
 
 /*

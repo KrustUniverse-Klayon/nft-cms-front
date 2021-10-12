@@ -2,29 +2,21 @@ import React, {useState, useEffect} from 'react'
 
 import {
   CBadge, CButton,
+  CLink,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
-  CDataTable,
+  CDataTable, CForm, CFormGroup, CFormText, CInput, CInputRadio, CLabel,
   CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
   CRow
 } from '@coreui/react'
 import { DocsLink } from 'src/reusable'
 
-import {apiGet, apiPatch} from "../util/Requests"
+import {apiGet, apiPostWithAuth} from "../util/Requests"
 
 
 
-const getBadge = status => {
-  switch (status) {
-    case 'Active': return 'success'
-    case 'Inactive': return 'secondary'
-    case 'Pending': return 'warning'
-    case 'Banned': return 'danger'
-    default: return 'primary'
-  }
-}
 const fields = ['product_id','name', 'image_url', 'price', 'currency',
                 'sale_method', 'sale_begin_at', 'sale_end_at']
 
@@ -36,11 +28,12 @@ const Tables = () => {
   const [modal, setModal] = useState(false)
   const [items, setItems] = useState()
   const [loading, setLoading] = useState(false)
-  const [approveItemId, setApproveItemId] = useState()
+  const [purchaseProductId, setPurchaseProductId] = useState()
+  const [userId, setUserId] = useState(10010)
 
-  const showApproveModel = itemId => {
+  const showPurchaseModel = itemId => {
     console.log(itemId)
-    setApproveItemId(itemId)
+    setPurchaseProductId(itemId)
     setModal(true)
   }
 
@@ -58,10 +51,33 @@ const Tables = () => {
     setLoading(false)
   }
 
+  const purchaseNFT = () => {
+
+    apiPostWithAuth(
+      `/api/v1/products/${purchaseProductId}/purchase`,
+      `${userId}`,
+      {
+        'count': 1,
+      },
+
+    )
+      .then(response => {
+        console.log('purchase')
+        fetchItems()
+      })
+      .catch(error => {
+        if (!error.response && error.request) {
+          // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+          console.log('요청이 실패했습니다.')
+        }
+      })
+    setModal(false)
+  }
+
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    fetchItems()
+  }, [])
 
 
   return (
@@ -70,7 +86,7 @@ const Tables = () => {
         <CCol xs="12" lg="12">
           <CCard>
             <CCardHeader>
-              심사 대기 카드 리스트
+              마켓에 노출되는 상품 리스트
               <DocsLink name="CModal"/>
             </CCardHeader>
             <CCardBody>
@@ -80,13 +96,12 @@ const Tables = () => {
                 itemsPerPage={10}
                 pagination
                 scopedSlots = {{
-                  'status':
+                  'name':
                     (item)=>(
                       <td>
-                        <CBadge onClick={() => showApproveModel(item.id)}
-                                color={getBadge(item.status)}>
-                          {item.status}
-                        </CBadge>
+                        <CLink onClick={() => showPurchaseModel(item.product_id)}>
+                          {item.name}
+                        </CLink>
                       </td>
                     ),
                   'image_url':
@@ -110,6 +125,51 @@ const Tables = () => {
 
                 }}
               />
+
+              <CModal
+                show={modal}
+                onClose={setModal}
+              >
+                <CModalHeader closeButton>
+                  <CModalTitle>구매 정보 입력 (데모용 임시 페이지)</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+
+                  <CCard>
+                    <CCardBody>
+                      <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
+
+                        <CFormGroup row>
+                          <CCol md="3">
+                            <CLabel htmlFor="text-input">유저 ID</CLabel>
+                          </CCol>
+                          <CCol xs="12" md="9">
+                            <CInput value={userId} onChange={e => setUserId(e.target.value)}
+                                    name="text-input" placeholder="" />
+                            <CFormText>숫자를 입력하세요</CFormText>
+                          </CCol>
+                        </CFormGroup>
+
+
+                      </CForm>
+                    </CCardBody>
+
+                  </CCard>
+
+
+
+
+                </CModalBody>
+                <CModalFooter>
+                  <CButton
+                    onClick={() => purchaseNFT(`${purchaseProductId}`)}
+                    color="primary">Purchase</CButton>
+                  <CButton
+                    color="secondary"
+                    onClick={() => setModal(false)}
+                  >Cancel</CButton>
+                </CModalFooter>
+              </CModal>
 
 
             </CCardBody>

@@ -41,13 +41,14 @@ const User = React.lazy(() => import('./views/users/User'));
 const MarketProducts = React.lazy(() => import('./views/market/Products'));
 const NFTWaiting = React.lazy(() => import('./views/nft/Waiting'));
 const NFTApproved = React.lazy(() => import('./views/nft/Approved'));
+const UserNFTs = React.lazy(() => import('./views/user/NFTs'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/market/products', name: 'Market Products', component: MarketProducts },
   { path: '/nft/waiting', name: 'NFT Waiting', component: NFTWaiting },
   { path: '/nft/approved', name: 'NFT Approved', component: NFTApproved },
-
+  { path: '/user/nfts', name: 'User NFTs', component: UserNFTs },
 
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
