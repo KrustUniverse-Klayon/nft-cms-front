@@ -86,6 +86,7 @@ const Tables = () => {
         'price': salePrice,
         'sale_begin_at': saleBeginDate+'T00:00:00.000Z',
         'sale_end_at': saleEndDate+'T00:00:00.000Z',
+        'exchange_begin_at': exchangeBeginDate+'T00:00:00.000Z',
         'exchange_end_at': exchangeEndDate+'T00:00:00.000Z',
       }
     )
