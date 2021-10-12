@@ -51,7 +51,7 @@ const Tables = () => {
       // loading 상태를 true 로 바꿉니다.
       setLoading(true);
       const response = await apiGet('/papi/v1/products')
-      setItems(response.data.data); // 데이터는 response.data 안에 들어있습니다.
+      setItems(response.data.products); // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
