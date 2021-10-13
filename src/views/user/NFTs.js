@@ -131,7 +131,7 @@ const Tables = () => {
         <CCol xs="12" lg="12">
           <CCard>
             <CCardHeader>
-              심사 대기 카드 리스트
+              유저 지갑 내 카드 리스트
               <DocsLink name="CModal"/>
             </CCardHeader>
             <CCardBody>
