@@ -62,8 +62,8 @@ const Tables = () => {
     apiPatch(`/papi/v1/templates/${itemId}/approve`)
       .then(response => {
         console.log('approved')
-        apiPost(`/api/v1/nfts/mint`,
-          {'template_id': parseInt(`${itemId}`)})
+        apiPost(`/api/v1/nfts/mint`,{},
+        { params: {'template_id': parseInt(`${itemId}`)}})
           .then(response => {
             console.log('mint success!!')
           })
