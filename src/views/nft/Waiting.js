@@ -13,7 +13,7 @@ import {
 } from '@coreui/react'
 import { DocsLink } from 'src/reusable'
 
-import {apiGet, apiPatch} from "../util/Requests"
+import {apiGet, apiPatch, apiPost} from "../util/Requests"
 
 
 
@@ -62,6 +62,11 @@ const Tables = () => {
     apiPatch(`/papi/v1/templates/${itemId}/approve`)
       .then(response => {
         console.log('approved')
+        apiPost(`/api/v1/nfts/mint`,
+          {'template_id': {itemId}})
+          .then(response => {
+            console.log('mint success!!')
+          })
         fetchItems();
       })
       .catch(error => {
