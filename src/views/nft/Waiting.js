@@ -63,7 +63,7 @@ const Tables = () => {
       .then(response => {
         console.log('approved')
         apiPost(`/api/v1/nfts/mint`,
-          {'template_id': {itemId}})
+          {'template_id': `${itemId}`})
           .then(response => {
             console.log('mint success!!')
           })
