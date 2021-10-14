@@ -16,9 +16,7 @@ $ npm -v
 
 # install
 ```
-$ brew install yarn
 $ npm install
-$ yarn add axios
 ```
 
 # run

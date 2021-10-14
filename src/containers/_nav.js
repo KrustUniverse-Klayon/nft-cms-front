@@ -6,7 +6,7 @@ import CIcon from '@coreui/icons-react'
 const _nav =  [
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['NFT 심사']
+    _children: ['NFT']
   },
   {
     _tag: 'CSidebarNavItem',

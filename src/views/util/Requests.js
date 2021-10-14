@@ -4,9 +4,7 @@ export const NETWORK_ERROR_CODE = 99999;
 export const AUTH_ERROR_CODE = 1004;
 
 const axiosInstance = axios.create({
-  //baseURL: global.constants.FASTAPI_URL,
-  baseURL: 'http://10.1.57.238:8000',
-  //baseURL: 'http://localhost:8000',
+  baseURL: global.constants.FASTAPI_URL,
   responseType: 'json',
 });
 

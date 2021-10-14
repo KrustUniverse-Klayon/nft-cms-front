@@ -1,8 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme/build'
 import App from './App'
-import ChartLineSimple from './views/charts/ChartLineSimple'
-import Dashboard from './views/dashboard/Dashboard.js'
+import ChartLineSimple from './examples/charts/ChartLineSimple'
+import Dashboard from './examples/dashboard/Dashboard.js'
 
 
 it('mounts App without crashing', () => {

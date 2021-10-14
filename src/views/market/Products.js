@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import {apiGet, apiPostWithAuth} from "../util/Requests"
 
 import {
   CBadge, CButton,
@@ -11,16 +12,9 @@ import {
   CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
   CRow
 } from '@coreui/react'
-import { DocsLink } from 'src/reusable'
-
-import {apiGet, apiPostWithAuth} from "../util/Requests"
-
-
 
 const fields = ['product_id','name', 'image_url', 'price', 'currency',
                 'sale_method', 'sale_begin_at', 'sale_end_at']
-
-
 
 
 const Tables = () => {
@@ -30,12 +24,6 @@ const Tables = () => {
   const [loading, setLoading] = useState(false)
   const [purchaseProductId, setPurchaseProductId] = useState()
   const [userId, setUserId] = useState(10010)
-
-  const showPurchaseModel = itemId => {
-    console.log(itemId)
-    setPurchaseProductId(itemId)
-    setModal(true)
-  }
 
   const fetchItems = async () => {
     try {
@@ -51,6 +39,11 @@ const Tables = () => {
     setLoading(false)
   }
 
+  const showPurchaseModel = itemId => {
+    setPurchaseProductId(itemId)
+    setModal(true)
+  }
+
   const purchaseNFT = () => {
 
     apiPostWithAuth(
@@ -59,7 +52,6 @@ const Tables = () => {
       {
         'count': 1,
       },
-
     )
       .then(response => {
         console.log('purchase')
@@ -74,11 +66,54 @@ const Tables = () => {
     setModal(false)
   }
 
-
   useEffect(() => {
     fetchItems()
   }, [])
 
+  const TmpModal = () => {
+    return (
+      <CModal
+        show={modal}
+        onClose={setModal}
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>구매 정보 입력 (데모용 임시 페이지)</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+
+          <CCard>
+            <CCardBody>
+              <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">유저 ID</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={userId} onChange={e => setUserId(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+
+
+              </CForm>
+            </CCardBody>
+          </CCard>
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            onClick={() => purchaseNFT()}
+            color="primary">Purchase</CButton>
+          <CButton
+            color="secondary"
+            onClick={() => setModal(false)}
+          >Cancel</CButton>
+        </CModalFooter>
+      </CModal>
+    )
+  }
 
   return (
     <>
@@ -87,7 +122,6 @@ const Tables = () => {
           <CCard>
             <CCardHeader>
               마켓에 노출되는 상품 리스트
-              <DocsLink name="CModal"/>
             </CCardHeader>
             <CCardBody>
               <CDataTable
@@ -126,51 +160,7 @@ const Tables = () => {
                 }}
               />
 
-              <CModal
-                show={modal}
-                onClose={setModal}
-              >
-                <CModalHeader closeButton>
-                  <CModalTitle>구매 정보 입력 (데모용 임시 페이지)</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-
-                  <CCard>
-                    <CCardBody>
-                      <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
-
-                        <CFormGroup row>
-                          <CCol md="3">
-                            <CLabel htmlFor="text-input">유저 ID</CLabel>
-                          </CCol>
-                          <CCol xs="12" md="9">
-                            <CInput value={userId} onChange={e => setUserId(e.target.value)}
-                                    name="text-input" placeholder="" />
-                            <CFormText>숫자를 입력하세요</CFormText>
-                          </CCol>
-                        </CFormGroup>
-
-
-                      </CForm>
-                    </CCardBody>
-
-                  </CCard>
-
-
-
-
-                </CModalBody>
-                <CModalFooter>
-                  <CButton
-                    onClick={() => purchaseNFT(`${purchaseProductId}`)}
-                    color="primary">Purchase</CButton>
-                  <CButton
-                    color="secondary"
-                    onClick={() => setModal(false)}
-                  >Cancel</CButton>
-                </CModalFooter>
-              </CModal>
-
+              <TmpModal></TmpModal>
 
             </CCardBody>
           </CCard>
