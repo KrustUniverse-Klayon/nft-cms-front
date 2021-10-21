@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {apiGet, apiPost} from "../util/Requests"
 
 import {
-  CBadge, CButton,
+  CLink, CButton,
   CCard,
   CCardBody,
   CCardFooter,
@@ -19,7 +19,7 @@ import {
   CRow
 } from '@coreui/react'
 
-const fields = ['id','name', 'description', 'image_url', 'status']
+const fields = ['id', 'image_url', 'name', 'creator_id', 'number_of_sales', 'register']
 
 
 const Tables = () => {
@@ -35,6 +35,8 @@ const Tables = () => {
   const [saleEndDate, setSaleEndDate] = useState()
   const [exchangeBeginDate, setExchangeBeginDate] = useState()
   const [exchangeEndDate, setExchangeEndDate] = useState()
+  const [rsAuthor, setRsAuthor] = useState(2.5)
+  const [rsMarket, setRsMarket] = useState(2.5)
 
   const fetchItems = async () => {
     try {
@@ -43,7 +45,7 @@ const Tables = () => {
       // loading 상태를 true 로 바꿉니다.
       setLoading(true)
       const response = await apiGet('/papi/v1/templates?status=approved')
-      setItems(response.data.data) // 데이터는 response.data 안에 들어있습니다.
+      setItems(response.data.templates) // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
@@ -213,6 +215,28 @@ const Tables = () => {
                             type="date" id="date-input" name="date-input" placeholder="date" />
                   </CCol>
                 </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">제작자 로열티(%)</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={rsAuthor} onChange={e => setRsAuthor(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">플랫폼 수수료(%)</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={rsMarket} onChange={e => setRsMarket(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+
               </CForm>
             </CCardBody>
 
@@ -247,13 +271,12 @@ const Tables = () => {
                 itemsPerPage={10}
                 pagination
                 scopedSlots = {{
-                  'status':
+                  'register':
                     (item)=>(
                       <td>
-                        <CBadge onClick={() => showRegisterModel(item.id)}
-                                color='primary'>
-                          {item.status}
-                        </CBadge>
+                        <CButton color="secondary" onClick={() => showRegisterModel(item.id)}>
+                          등록
+                        </CButton>
                       </td>
                     ),
                   'image_url':
