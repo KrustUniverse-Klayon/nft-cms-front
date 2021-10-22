@@ -274,6 +274,9 @@ const Tables = () => {
                   'register':
                     (item)=>(
                       <td>
+                        <CButton color="warning" onClick={() => showRegisterModel(item.id)}>
+                          민팅
+                        </CButton>
                         <CButton color="secondary" onClick={() => showRegisterModel(item.id)}>
                           등록
                         </CButton>
