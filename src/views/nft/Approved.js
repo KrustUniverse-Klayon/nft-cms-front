@@ -28,6 +28,7 @@ const Tables = () => {
   const [items, setItems] = useState()
   const [loading, setLoading] = useState(false)
   const [registerItemId, setRegisterItemId] = useState()
+
   const [saleMethod, setSaleMethod] = useState('single_price')
   const [saleCurrency, setSaleCurrency] = useState('peb')
   const [salePrice, setSalePrice] = useState()
@@ -37,6 +38,7 @@ const Tables = () => {
   const [exchangeEndDate, setExchangeEndDate] = useState()
   const [rsAuthor, setRsAuthor] = useState(2.5)
   const [rsMarket, setRsMarket] = useState(2.5)
+  const [saleCount, setSaleCount] = useState(1)
 
   const fetchItems = async () => {
     try {
@@ -68,6 +70,9 @@ const Tables = () => {
         'template_id': registerItemId,
         'sale_method': saleMethod,
         'price': salePrice,
+        'royalty': rsAuthor,
+        'fees': rsMarket,
+        'sale_count': saleCount,
         'sale_begin_at': saleBeginDate+'T00:00:00.000Z',
         'sale_end_at': saleEndDate+'T00:00:00.000Z',
         'exchange_begin_at': exchangeBeginDate+'T00:00:00.000Z',
@@ -173,6 +178,16 @@ const Tables = () => {
                   </CCol>
                   <CCol xs="12" md="9">
                     <CInput value={salePrice} onChange={e => setSalePrice(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>1 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">판매 개수</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={saleCount} onChange={e => setSaleCount(e.target.value)}
                             name="text-input" placeholder="" />
                     <CFormText>1 이상의 숫자를 입력하세요</CFormText>
                   </CCol>
