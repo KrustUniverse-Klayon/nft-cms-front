@@ -37,6 +37,7 @@ const Tables = () => {
   const [exchangeEndDate, setExchangeEndDate] = useState()
   const [rsAuthor, setRsAuthor] = useState(2.5)
   const [rsMarket, setRsMarket] = useState(2.5)
+  const [registerNumberOfSales, setRegisterNumberOfSales] = useState()
 
   const fetchItems = async () => {
     try {
@@ -56,9 +57,19 @@ const Tables = () => {
     setSaleMethod(e.target.value)
   }
 
-  const showRegisterModel = itemId => {
+  const showRegisterModel = (itemId, number_of_sales) => {
     setRegisterItemId(itemId)
+    setRegisterNumberOfSales(number_of_sales)
     setModal(true)
+  }
+
+  // NFT 민팅 - template 에 세팅된 number_of_sales 개수 만큼
+  const mintNFT = (templateId) => {
+    apiPost(`/papi/v1/nfts/mint/bulk`,{},
+      { params: {'template_id': parseInt(templateId)}})
+      .then(response => {
+        console.log('mint success!!')
+      })
   }
 
   const registerNFT = () => {
@@ -72,6 +83,8 @@ const Tables = () => {
         'sale_end_at': saleEndDate+'T00:00:00.000Z',
         'exchange_begin_at': exchangeBeginDate+'T00:00:00.000Z',
         'exchange_end_at': exchangeEndDate+'T00:00:00.000Z',
+        'rsAuthor': rsAuthor,
+        'rsMarket': rsMarket
       }
     )
       .then(response => {
@@ -274,10 +287,11 @@ const Tables = () => {
                   'register':
                     (item)=>(
                       <td>
-                        <CButton color="warning" onClick={() => showRegisterModel(item.id)}>
+                        <CButton color="warning" onClick={() => mintNFT(item.id)}>
                           민팅
                         </CButton>
-                        <CButton color="secondary" onClick={() => showRegisterModel(item.id)}>
+                        <CButton color="secondary"
+                                 onClick={() => showRegisterModel(item.id, item.number_of_sales)}>
                           등록
                         </CButton>
                       </td>

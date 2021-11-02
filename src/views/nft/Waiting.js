@@ -41,23 +41,10 @@ const Tables = () => {
     setModal(true)
   }
 
-  // NFT 민팅 - template 에 세팅된 number_of_sales 개수 만큼
-  const mintNFT = mintCount => {
-    if (mintCount == 1)
-
-    apiPost(`/papi/v1/nfts/mint`,{},
-      { params: {'template_id': parseInt(approveItemId)}})
-      .then(response => {
-        console.log('mint success!!')
-      })
-  }
-
   const approveNFT = () => {
     apiPatch(`/papi/v1/templates/${approveItemId}/approve`)
       .then(response => {
         console.log('approved')
-        let number_of_sales = response.data.number_of_sales
-        mintNFT(number_of_sales)
         fetchItems()
       })
       .catch(error => {
