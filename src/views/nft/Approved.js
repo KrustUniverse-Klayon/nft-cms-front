@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {apiGet, apiPost} from "../util/Requests"
+import {apiGet, apiPost, apiPostWithAuth} from "../util/Requests"
 
 import {
   CLink, CButton,
@@ -47,7 +47,7 @@ const Tables = () => {
       // loading 상태를 true 로 바꿉니다.
       setLoading(true)
       const response = await apiGet('/papi/v1/templates?status=approved')
-      setItems(response.data.templates) // 데이터는 response.data 안에 들어있습니다.
+      setItems(response.data.results) // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
@@ -58,7 +58,7 @@ const Tables = () => {
     setSaleMethod(e.target.value)
   }
 
-  const showRegisterModel = (itemId, number_of_sales) => {
+  const showRegisterModal = (itemId, number_of_sales) => {
     setRegisterItemId(itemId)
     setRegisterNumberOfSales(number_of_sales)
     setModal(true)
@@ -74,8 +74,9 @@ const Tables = () => {
   }
 
   const registerNFT = () => {
-    apiPost(
+    apiPostWithAuth(
       `/papi/v1/products/`,
+      '10020',
       {
         'template_id': registerItemId,
         'sale_method': saleMethod,
@@ -107,6 +108,7 @@ const Tables = () => {
   }, [])
 
   const RegisterModal = () => {
+    console.log('a')
     return(
       <CModal
         show={modal}
@@ -281,6 +283,7 @@ const Tables = () => {
     )
   }
 
+  console.log('b')
   return (
     <>
       <CRow>
@@ -303,7 +306,7 @@ const Tables = () => {
                           민팅
                         </CButton>
                         <CButton color="secondary"
-                                 onClick={() => showRegisterModel(item.id, item.number_of_sales)}>
+                                 onClick={() => showRegisterModal(item.id, item.number_of_sales)}>
                           등록
                         </CButton>
                       </td>

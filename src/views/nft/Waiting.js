@@ -28,7 +28,7 @@ const Tables = () => {
       setItems(null)
       setLoading(true)
       const response = await apiGet('/papi/v1/templates?status=wait')
-      setItems(response.data.templates) // 데이터는 response.data 안에 들어있습니다.
+      setItems(response.data.results) // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
