@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react'
-import {apiGet, apiPost} from "../util/Requests"
+import React, {useState, useEffect, useCallback} from 'react'
+import {apiGet, apiPost, apiPostWithAuth} from "../util/Requests"
 
 import {
-  CBadge, CButton,
+  CLink, CButton,
   CCard,
   CCardBody,
   CCardFooter,
@@ -19,7 +19,7 @@ import {
   CRow
 } from '@coreui/react'
 
-const fields = ['id','name', 'description', 'image_url', 'status']
+const fields = ['id', 'image_url', 'name', 'creator_id', 'number_of_sales', 'register']
 
 
 const Tables = () => {
@@ -28,6 +28,7 @@ const Tables = () => {
   const [items, setItems] = useState()
   const [loading, setLoading] = useState(false)
   const [registerItemId, setRegisterItemId] = useState()
+
   const [saleMethod, setSaleMethod] = useState('single_price')
   const [saleCurrency, setSaleCurrency] = useState('peb')
   const [salePrice, setSalePrice] = useState()
@@ -35,6 +36,9 @@ const Tables = () => {
   const [saleEndDate, setSaleEndDate] = useState()
   const [exchangeBeginDate, setExchangeBeginDate] = useState()
   const [exchangeEndDate, setExchangeEndDate] = useState()
+  const [rsAuthor, setRsAuthor] = useState(2.5)
+  const [rsMarket, setRsMarket] = useState(2.5)
+  const [registerNumberOfSales, setRegisterNumberOfSales] = useState(1)
 
   const fetchItems = async () => {
     try {
@@ -54,22 +58,36 @@ const Tables = () => {
     setSaleMethod(e.target.value)
   }
 
-  const showRegisterModel = itemId => {
+  const showRegisterModal = (itemId, number_of_sales) => {
     setRegisterItemId(itemId)
+    setRegisterNumberOfSales(number_of_sales)
     setModal(true)
   }
 
+  // NFT 민팅 - template 에 세팅된 number_of_sales 개수 만큼
+  const mintNFT = (templateId) => {
+    apiPost(`/papi/v1/nfts/mint/bulk`,{},
+      { params: {'template_id': parseInt(templateId)}})
+      .then(response => {
+        console.log('mint success!!')
+      })
+  }
+
   const registerNFT = () => {
-    apiPost(
+    apiPostWithAuth(
       `/papi/v1/products/`,
+      '10020',
       {
         'template_id': registerItemId,
         'sale_method': saleMethod,
         'price': salePrice,
+        'royalty': rsAuthor,
+        'fees': rsMarket,
+        'sale_count': registerNumberOfSales,
         'sale_begin_at': saleBeginDate+'T00:00:00.000Z',
         'sale_end_at': saleEndDate+'T00:00:00.000Z',
         'exchange_begin_at': exchangeBeginDate+'T00:00:00.000Z',
-        'exchange_end_at': exchangeEndDate+'T00:00:00.000Z',
+        'exchange_end_at': exchangeEndDate+'T00:00:00.000Z'
       }
     )
       .then(response => {
@@ -89,7 +107,8 @@ const Tables = () => {
     fetchItems()
   }, [])
 
-  const RegisterModal = () => {
+  // TODO: RegisterModal 파일 분리후 props로 내부 변수 전달하기
+  const RegisterModal = useCallback(() => {
     return(
       <CModal
         show={modal}
@@ -99,7 +118,6 @@ const Tables = () => {
           <CModalTitle>판매 정보 입력</CModalTitle>
         </CModalHeader>
         <CModalBody>
-
           <CCard>
             <CCardBody>
               <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
@@ -170,7 +188,17 @@ const Tables = () => {
                     <CLabel htmlFor="text-input">판매 가격</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                    <CInput value={salePrice} onChange={e => setSalePrice(e.target.value)}
+                    <CInput value={salePrice} onChange={e => {e.preventDefault();  setSalePrice(e.target.value); console.log(salePrice);}}
+                            name="text-input" placeholder="" />
+                    <CFormText>1 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">판매 개수</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={registerNumberOfSales} onChange={e => setRegisterNumberOfSales(e.target.value)}
                             name="text-input" placeholder="" />
                     <CFormText>1 이상의 숫자를 입력하세요</CFormText>
                   </CCol>
@@ -213,9 +241,30 @@ const Tables = () => {
                             type="date" id="date-input" name="date-input" placeholder="date" />
                   </CCol>
                 </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">제작자 로열티(%)</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={rsAuthor} onChange={e => setRsAuthor(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">플랫폼 수수료(%)</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={rsMarket} onChange={e => setRsMarket(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+
               </CForm>
             </CCardBody>
-
           </CCard>
 
         </CModalBody>
@@ -230,10 +279,11 @@ const Tables = () => {
         </CModalFooter>
       </CModal>
     )
-  }
+  }, [registerItemId, setRegisterItemId]);
 
   return (
     <>
+      <RegisterModal />
       <CRow>
         <CCol xs="12" lg="12">
           <CCard>
@@ -247,26 +297,26 @@ const Tables = () => {
                 itemsPerPage={10}
                 pagination
                 scopedSlots = {{
-                  'status':
+                  'register':
                     (item)=>(
                       <td>
-                        <CBadge onClick={() => showRegisterModel(item.id)}
-                                color='primary'>
-                          {item.status}
-                        </CBadge>
+                        <CButton color="warning" onClick={() => mintNFT(item.id)}>
+                          민팅
+                        </CButton>
+                        <CButton color="secondary"
+                                 onClick={() => showRegisterModal(item.id, item.number_of_sales)}>
+                          등록
+                        </CButton>
                       </td>
                     ),
                   'image_url':
                     (item)=>(
                       <td>
-                        <img src={item.image_url} width='50px' height='50px' ></img>
+                        <img src={item.image_url} width='50px' height='50px' />
                       </td>
                     ),
                 }}
               />
-
-              <RegisterModal></RegisterModal>
-
             </CCardBody>
           </CCard>
         </CCol>
