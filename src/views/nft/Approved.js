@@ -1,7 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {apiGet, apiPost, apiPostWithAuth} from "../util/Requests"
-import React, {useState, useEffect} from 'react'
-import {apiGet, apiPost, apiPostWithAuth} from "../util/Requests"
 
 import {
   CLink, CButton,
