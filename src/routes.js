@@ -35,8 +35,8 @@ const Modals = React.lazy(() => import('./examples/notifications/modals/Modals')
 const Colors = React.lazy(() => import('./examples/theme/colors/Colors'));
 const Typography = React.lazy(() => import('./examples/theme/typography/Typography'));
 const Widgets = React.lazy(() => import('./examples/widgets/Widgets'));
-const Users = React.lazy(() => import('./views/users/Users'));
-const User = React.lazy(() => import('./views/users/User'));
+const Users = React.lazy(() => import('./examples/users/Users'));
+const User = React.lazy(() => import('./examples/users/User'));
 
 const MarketProducts = React.lazy(() => import('./views/market/Products'));
 const NFTWaiting = React.lazy(() => import('./views/nft/Waiting'));

@@ -12,21 +12,20 @@ import {
   CRow
 } from '@coreui/react'
 
-const fields = ['id', 'name', 'description', 'image_url', 'status']
+const fields = ['id', 'image_url', 'number_of_sales', 'name', 'description',  'status']
 
 
 const Tables = () => {
 
   const [modal, setModal] = useState(false)
   const [items, setItems] = useState()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)  // TODO: 필요할 지 판단
   const [approveItemId, setApproveItemId] = useState()
 
+  // 심사 대기 카드 리스트 조회
   const fetchItems = async () => {
     try {
-      // 요청이 시작 할 때에는 error 와 users 를 초기화하고
       setItems(null)
-      // loading 상태를 true 로 바꿉니다.
       setLoading(true)
       const response = await apiGet('/papi/v1/templates?status=wait')
       setItems(response.data.results) // 데이터는 response.data 안에 들어있습니다.
@@ -36,24 +35,16 @@ const Tables = () => {
     setLoading(false)
   }
 
-  const showApproveModel = itemId => {
+  // 심사 승인 모달 창 띄우기
+  const showApproveModal = itemId => {
     setApproveItemId(itemId)
     setModal(true)
-  }
-
-  const mintNFT = () => {
-    apiPost(`/api/v1/nfts/mint`,{},
-      { params: {'template_id': parseInt(approveItemId)}})
-      .then(response => {
-        console.log('mint success!!')
-      })
   }
 
   const approveNFT = () => {
     apiPatch(`/papi/v1/templates/${approveItemId}/approve`)
       .then(response => {
         console.log('approved')
-        mintNFT()
         fetchItems()
       })
       .catch(error => {
@@ -112,7 +103,7 @@ const Tables = () => {
                   'status':
                     (item)=>(
                       <td>
-                        <CBadge onClick={() => showApproveModel(item.id)}
+                        <CBadge onClick={() => showApproveModal(item.id)}
                                 color='warning'>
                           {item.status}
                         </CBadge>
