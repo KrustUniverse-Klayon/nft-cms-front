@@ -74,16 +74,18 @@ const Tables = () => {
   }
 
   const registerNFT = () => {
+    console.log(salePrice, registerNumberOfSales)
+    return
     apiPostWithAuth(
       `/papi/v1/products/`,
       '10020',
       {
         'template_id': registerItemId,
         'sale_method': saleMethod,
-        'price': salePrice,
-        'royalty': rsAuthor,
-        'fees': rsMarket,
-        'sale_count': registerNumberOfSales,
+        'price': Number(salePrice),
+        'royalty': rsAuthor/100,
+        'fees': rsMarket/100,
+        'sale_count': Number(registerNumberOfSales),
         'sale_begin_at': saleBeginDate+'T00:00:00.000Z',
         'sale_end_at': saleEndDate+'T00:00:00.000Z',
         'exchange_begin_at': exchangeBeginDate+'T00:00:00.000Z',
@@ -188,7 +190,7 @@ const Tables = () => {
                     <CLabel htmlFor="text-input">판매 가격</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                    <CInput value={salePrice} onChange={e => {e.preventDefault();  setSalePrice(e.target.value); console.log(salePrice);}}
+                    <CInput value={salePrice} onChange={e => {e.preventDefault(); setSalePrice(e.target.value); console.log(salePrice);}}
                             name="text-input" placeholder="" />
                     <CFormText>1 이상의 숫자를 입력하세요</CFormText>
                   </CCol>
