@@ -107,6 +107,7 @@ const Tables = () => {
     fetchItems()
   }, [])
 
+  // TODO: RegisterModal 파일 분리후 props로 내부 변수 전달하기
   const RegisterModal = useCallback(() => {
     return(
       <CModal
@@ -280,7 +281,6 @@ const Tables = () => {
     )
   }, [registerItemId, setRegisterItemId]);
 
-  console.log('b')
   return (
     <>
       <RegisterModal />
