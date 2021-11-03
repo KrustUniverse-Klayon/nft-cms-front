@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {apiGet, apiPost} from "../util/Requests"
 
 import {
@@ -54,7 +54,7 @@ const Tables = () => {
     setSaleMethod(e.target.value)
   }
 
-  const showRegisterModel = itemId => {
+  const showRegisterModal = itemId => {
     setRegisterItemId(itemId)
     setModal(true)
   }
@@ -89,7 +89,7 @@ const Tables = () => {
     fetchItems()
   }, [])
 
-  const RegisterModal = () => {
+  const RegisterModal = useCallback(() => {
     return(
       <CModal
         show={modal}
@@ -99,7 +99,6 @@ const Tables = () => {
           <CModalTitle>판매 정보 입력</CModalTitle>
         </CModalHeader>
         <CModalBody>
-
           <CCard>
             <CCardBody>
               <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
@@ -170,7 +169,7 @@ const Tables = () => {
                     <CLabel htmlFor="text-input">판매 가격</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                    <CInput value={salePrice} onChange={e => setSalePrice(e.target.value)}
+                    <CInput value={salePrice} onChange={e => {e.preventDefault();  setSalePrice(e.target.value); console.log(salePrice);}}
                             name="text-input" placeholder="" />
                     <CFormText>1 이상의 숫자를 입력하세요</CFormText>
                   </CCol>
@@ -215,7 +214,6 @@ const Tables = () => {
                 </CFormGroup>
               </CForm>
             </CCardBody>
-
           </CCard>
 
         </CModalBody>
@@ -230,10 +228,11 @@ const Tables = () => {
         </CModalFooter>
       </CModal>
     )
-  }
+  }, [registerItemId, setRegisterItemId]);
 
   return (
     <>
+      <RegisterModal />
       <CRow>
         <CCol xs="12" lg="12">
           <CCard>
@@ -250,7 +249,7 @@ const Tables = () => {
                   'status':
                     (item)=>(
                       <td>
-                        <CBadge onClick={() => showRegisterModel(item.id)}
+                        <CBadge onClick={() => showRegisterModal(item.id)}
                                 color='primary'>
                           {item.status}
                         </CBadge>
@@ -259,14 +258,11 @@ const Tables = () => {
                   'image_url':
                     (item)=>(
                       <td>
-                        <img src={item.image_url} width='50px' height='50px' ></img>
+                        <img src={item.image_url} width='50px' height='50px' />
                       </td>
                     ),
                 }}
               />
-
-              <RegisterModal></RegisterModal>
-
             </CCardBody>
           </CCard>
         </CCol>
