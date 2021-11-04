@@ -18,6 +18,7 @@ import {
   CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
   CRow
 } from '@coreui/react'
+import {number} from "prop-types";
 
 const fields = ['id', 'image_url', 'name', 'creator_id', 'number_of_sales', 'register']
 
@@ -80,10 +81,10 @@ const Tables = () => {
       {
         'template_id': registerItemId,
         'sale_method': saleMethod,
-        'price': salePrice,
-        'royalty': rsAuthor,
-        'fees': rsMarket,
-        'sale_count': registerNumberOfSales,
+        'price': Number(salePrice),
+        'royalty': rsAuthor/100,
+        'fees': rsMarket/100,
+        'sale_count': Number(registerNumberOfSales),
         'sale_begin_at': saleBeginDate+'T00:00:00.000Z',
         'sale_end_at': saleEndDate+'T00:00:00.000Z',
         'exchange_begin_at': exchangeBeginDate+'T00:00:00.000Z',
@@ -108,182 +109,16 @@ const Tables = () => {
   }, [])
 
   // TODO: RegisterModal 파일 분리후 props로 내부 변수 전달하기
-  const RegisterModal = useCallback(() => {
-    return(
-      <CModal
-        show={modal}
-        onClose={setModal}
-      >
-        <CModalHeader closeButton>
-          <CModalTitle>판매 정보 입력</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CCard>
-            <CCardBody>
-              <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
-
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel>판매 방식</CLabel>
-                  </CCol>
-                  <CCol md="9">
-                    <CFormGroup variant="custom-radio" inline>
-                      <CInputRadio custom id="sale-method-radio1"
-                                   name="sale-method-radios"
-                                   onChange={changeSaleMethod}
-                                   value="single_price"
-                                   checked={saleMethod === 'single_price'}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="sale-method-radio1">지정 단일가</CLabel>
-                    </CFormGroup>
-                    <CFormGroup variant="custom-radio" inline>
-                      <CInputRadio custom id="sale-method-radio2"
-                                   name="sale-method-radios"
-                                   onChange={changeSaleMethod}
-                                   value="auction"
-                                   checked={saleMethod === 'auction'}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="sale-method-radio2">경매</CLabel>
-                    </CFormGroup>
-                    <CFormGroup variant="custom-radio" inline>
-                      <CInputRadio custom id="sale-method-radio3"
-                                   name="sale-method-radios"
-                                   onChange={changeSaleMethod}
-                                   value="bonding"
-                                   checked={saleMethod === 'bonding'}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="sale-method-radio3">본딩 커브</CLabel>
-                    </CFormGroup>
-                  </CCol>
-                </CFormGroup>
-
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel>결제 수단</CLabel>
-                  </CCol>
-                  <CCol md="9">
-                    <CFormGroup variant="custom-radio" inline>
-                      <CInputRadio custom id="sale-currency-radio1"
-                                   name="sale-currency-radios"
-                                   value="peb"
-                                   onChange={e => setSaleCurrency(e.target.value)}
-                                   checked={saleCurrency === 'peb'}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="sale-currency-radio1">Klay</CLabel>
-                    </CFormGroup>
-                    <CFormGroup variant="custom-radio" inline>
-                      <CInputRadio custom id="sale-currency-radio2"
-                                   name="sale-currency-radios"
-                                   value="k-token"
-                                   onChange={e => setSaleCurrency(e.target.value)}
-                                   checked={saleCurrency === 'k-token'}
-                      />
-                      <CLabel variant="custom-checkbox" htmlFor="sale-currency-radio2">k-token</CLabel>
-                    </CFormGroup>
-                  </CCol>
-                </CFormGroup>
-
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="text-input">판매 가격</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={salePrice} onChange={e => {e.preventDefault();  setSalePrice(e.target.value); console.log(salePrice);}}
-                            name="text-input" placeholder="" />
-                    <CFormText>1 이상의 숫자를 입력하세요</CFormText>
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="text-input">판매 개수</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={registerNumberOfSales} onChange={e => setRegisterNumberOfSales(e.target.value)}
-                            name="text-input" placeholder="" />
-                    <CFormText>1 이상의 숫자를 입력하세요</CFormText>
-                  </CCol>
-                </CFormGroup>
-
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="date-input">판매 시작일</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={saleBeginDate} onChange={e => setSaleBeginDate(e.target.value)}
-                            type="date" name="date-input" placeholder="date" />
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="date-input">판매 종료일</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={saleEndDate} onChange={e => setSaleEndDate(e.target.value)}
-                            type="date" id="date-input" name="date-input" placeholder="date" />
-                  </CCol>
-                </CFormGroup>
-
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="date-input">교환 시작일</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={exchangeBeginDate} onChange={e => setExchangeBeginDate(e.target.value)}
-                            type="date" id="date-input" name="date-input" placeholder="date" />
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="date-input">교환 종료일</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={exchangeEndDate} onChange={e => setExchangeEndDate(e.target.value)}
-                            type="date" id="date-input" name="date-input" placeholder="date" />
-                  </CCol>
-                </CFormGroup>
-
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="text-input">제작자 로열티(%)</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={rsAuthor} onChange={e => setRsAuthor(e.target.value)}
-                            name="text-input" placeholder="" />
-                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
-                  </CCol>
-                </CFormGroup>
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="text-input">플랫폼 수수료(%)</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={rsMarket} onChange={e => setRsMarket(e.target.value)}
-                            name="text-input" placeholder="" />
-                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
-                  </CCol>
-                </CFormGroup>
-
-              </CForm>
-            </CCardBody>
-          </CCard>
-
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            onClick={() => registerNFT()}
-            color="primary">Register</CButton>
-          <CButton
-            color="secondary"
-            onClick={() => setModal(false)}
-          >Cancel</CButton>
-        </CModalFooter>
-      </CModal>
-    )
-  }, [registerItemId, setRegisterItemId]);
 
   return (
     <>
-      <RegisterModal />
+      <RegisterModal modal={modal} setModal={setModal} registerNFT={registerNFT} salePrice={salePrice} setSalePrice={setSalePrice}
+      saleMethod={saleMethod} setSaleMethod={setSaleMethod} saleCurrency={saleCurrency} setSaleCurrency={setSaleCurrency}
+      saleBeginDate={saleBeginDate} setSaleBeginDate={setSaleBeginDate} saleEndDate={saleEndDate} setSaleEndDate={setSaleEndDate}
+      exchangeBeginDate={exchangeBeginDate} setExchangeBeginDate={setExchangeBeginDate}
+      exchangeEndDate={exchangeEndDate} setExchangeEndDate={setExchangeEndDate}
+      rsAuthor={rsAuthor} setRsAuthor={setRsAuthor} rsMarket={rsMarket} setRsMarket={setRsMarket} registerNumberOfSales={registerNumberOfSales}
+      changeSaleMethod={changeSaleMethod} setRegisterNumberOfSales={setRegisterNumberOfSales}/>
       <CRow>
         <CCol xs="12" lg="12">
           <CCard>
@@ -325,5 +160,177 @@ const Tables = () => {
     </>
   )
 }
+
+const RegisterModal = (props) => {
+    return(
+      <CModal
+        show={props.modal}
+        onClose={props.setModal}
+      >
+        <CModalHeader closeButton>
+          <CModalTitle>판매 정보 입력</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CCard>
+            <CCardBody>
+              <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel>판매 방식</CLabel>
+                  </CCol>
+                  <CCol md="9">
+                    <CFormGroup variant="custom-radio" inline>
+                      <CInputRadio custom id="sale-method-radio1"
+                                   name="sale-method-radios"
+                                   onChange={props.changeSaleMethod}
+                                   value="single_price"
+                                   checked={props.saleMethod === 'single_price'}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor="sale-method-radio1">지정 단일가</CLabel>
+                    </CFormGroup>
+                    <CFormGroup variant="custom-radio" inline>
+                      <CInputRadio custom id="sale-method-radio2"
+                                   name="sale-method-radios"
+                                   onChange={props.changeSaleMethod}
+                                   value="auction"
+                                   checked={props.saleMethod === 'auction'}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor="sale-method-radio2">경매</CLabel>
+                    </CFormGroup>
+                    <CFormGroup variant="custom-radio" inline>
+                      <CInputRadio custom id="sale-method-radio3"
+                                   name="sale-method-radios"
+                                   onChange={props.changeSaleMethod}
+                                   value="bonding"
+                                   checked={props.saleMethod === 'bonding'}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor="sale-method-radio3">본딩 커브</CLabel>
+                    </CFormGroup>
+                  </CCol>
+                </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel>결제 수단</CLabel>
+                  </CCol>
+                  <CCol md="9">
+                    <CFormGroup variant="custom-radio" inline>
+                      <CInputRadio custom id="sale-currency-radio1"
+                                   name="sale-currency-radios"
+                                   value="peb"
+                                   onChange={e => props.setSaleCurrency(e.target.value)}
+                                   checked={props.saleCurrency === 'peb'}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor="sale-currency-radio1">Klay</CLabel>
+                    </CFormGroup>
+                    <CFormGroup variant="custom-radio" inline>
+                      <CInputRadio custom id="sale-currency-radio2"
+                                   name="sale-currency-radios"
+                                   value="k-token"
+                                   onChange={e => props.setSaleCurrency(e.target.value)}
+                                   checked={props.saleCurrency === 'k-token'}
+                      />
+                      <CLabel variant="custom-checkbox" htmlFor="sale-currency-radio2">k-token</CLabel>
+                    </CFormGroup>
+                  </CCol>
+                </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">판매 가격</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.salePrice} onChange={e =>  props.setSalePrice(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>1 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">판매 개수</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.registerNumberOfSales} onChange={e => props.setRegisterNumberOfSales(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>1 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="date-input">판매 시작일</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.saleBeginDate} onChange={e => props.setSaleBeginDate(e.target.value)}
+                            type="date" name="date-input" placeholder="date" />
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="date-input">판매 종료일</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.saleEndDate} onChange={e => props.setSaleEndDate(e.target.value)}
+                            type="date" id="date-input" name="date-input" placeholder="date" />
+                  </CCol>
+                </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="date-input">교환 시작일</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.exchangeBeginDate} onChange={e => props.setExchangeBeginDate(e.target.value)}
+                            type="date" id="date-input" name="date-input" placeholder="date" />
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="date-input">교환 종료일</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.exchangeEndDate} onChange={e => props.setExchangeEndDate(e.target.value)}
+                            type="date" id="date-input" name="date-input" placeholder="date" />
+                  </CCol>
+                </CFormGroup>
+
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">제작자 로열티(%)</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.rsAuthor} onChange={e => props.setRsAuthor(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+                <CFormGroup row>
+                  <CCol md="3">
+                    <CLabel htmlFor="text-input">플랫폼 수수료(%)</CLabel>
+                  </CCol>
+                  <CCol xs="12" md="9">
+                    <CInput value={props.rsMarket} onChange={e => props.setRsMarket(e.target.value)}
+                            name="text-input" placeholder="" />
+                    <CFormText>0 이상의 숫자를 입력하세요</CFormText>
+                  </CCol>
+                </CFormGroup>
+
+              </CForm>
+            </CCardBody>
+          </CCard>
+
+        </CModalBody>
+        <CModalFooter>
+          <CButton
+            onClick={() => props.registerNFT()}
+            color="primary">Register</CButton>
+          <CButton
+            color="secondary"
+            onClick={() => props.setModal(false)}
+          >Cancel</CButton>
+        </CModalFooter>
+      </CModal>
+    )
+  };
 
 export default Tables
