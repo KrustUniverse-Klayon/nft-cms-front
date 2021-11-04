@@ -66,7 +66,7 @@ const Tables = () => {
         `/api/v1/users/${userId}/nfts`,
         `${userId}`,
         )
-      setItems(response.data.items); // 데이터는 response.data 안에 들어있습니다.
+      setItems(response.data.results); // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
