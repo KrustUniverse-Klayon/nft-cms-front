@@ -75,6 +75,8 @@ const Tables = () => {
   }
 
   const registerNFT = () => {
+    console.log(salePrice, registerNumberOfSales)
+    return
     apiPostWithAuth(
       `/papi/v1/products/`,
       '10020',
