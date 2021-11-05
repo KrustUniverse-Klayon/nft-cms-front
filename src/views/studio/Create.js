@@ -19,7 +19,7 @@ const Tables = () => {
   const defaultInputs = {
     cardName: '',
     cardDescription: '',
-    cardType: 'TICKET',
+    cardType: 'ticket',
     cardIssueLimit: 1
   };
 
@@ -60,7 +60,6 @@ const Tables = () => {
   }
 
   const handleFileOnChange = (e) => {    // 파일 불러오기
-    console.log('aa');
     e.preventDefault();
     setErrorMsg('');
 
@@ -134,7 +133,7 @@ const Tables = () => {
   const registerTemplate = (imageUrl, mediaUrl) => {
 
     // TODO: 실제 값으로 (설정에서)
-    const contractId = 21;
+    const contractId = 35;
 
     let params = {
       image_url: imageUrl,
@@ -247,8 +246,8 @@ const Tables = () => {
                       <CInputRadio custom id="sale-method-radio1"
                                    name="cardType"
                                    onChange={inputOnChange}
-                                   value="TICKET"
-                                   checked={cardType === 'TICKET'}
+                                   value="ticket"
+                                   checked={cardType === 'ticket'}
                       />
                       <CLabel variant="custom-checkbox" htmlFor="sale-method-radio1">티켓</CLabel>
                     </CFormGroup>
@@ -256,8 +255,8 @@ const Tables = () => {
                       <CInputRadio custom id="sale-method-radio2"
                                    name="cardType"
                                    onChange={inputOnChange}
-                                   value="WARRENTY"
-                                   checked={cardType === 'WARRENTY'}
+                                   value="warranty"
+                                   checked={cardType === 'warranty'}
                       />
                       <CLabel variant="custom-checkbox" htmlFor="sale-method-radio2">보증서</CLabel>
                     </CFormGroup>
@@ -307,6 +306,10 @@ const Tables = () => {
 
 
               </CForm>
+
+              <div className="mb-3 text-danger">
+                <div dangerouslySetInnerHTML={{__html: errorMsg}} />
+              </div>
 
               <CButton
                 onClick={enrollCard}
