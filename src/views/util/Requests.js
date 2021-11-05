@@ -45,6 +45,10 @@ export async function apiPatch(url, params, options={}) {
   return await axiosInstance.patch(url, params, options);
 }
 
+export async function apiPut(url, params, options={}) {
+  return await axiosInstance.put(url, params, options);
+}
+
 export async function apiGetWithAuth(url, accessToken, params={}, options={}) {
   return await axiosInstance.get(url,
     {

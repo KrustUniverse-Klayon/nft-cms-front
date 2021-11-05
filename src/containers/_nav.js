@@ -6,6 +6,16 @@ import CIcon from '@coreui/icons-react'
 const _nav =  [
   {
     _tag: 'CSidebarNavTitle',
+    _children: ['Studio']
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: '제작',
+    to: '/studio/create',
+    icon: 'cil-pencil',
+  },
+  {
+    _tag: 'CSidebarNavTitle',
     _children: ['NFT']
   },
   {
