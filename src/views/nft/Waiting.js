@@ -1,92 +1,56 @@
-import React, {useState, useEffect} from 'react'
-import {apiGet, apiPatch, apiPost} from "../util/Requests"
+import {useState, useEffect, useCallback} from 'react'
+import {apiGet} from "../util/Requests"
 
 import {
-  CBadge, CButton,
+  CBadge,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
   CDataTable,
-  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
   CRow
 } from '@coreui/react'
 
+import ApproveModal from "./modals/ApproveModal";
 const fields = ['id', 'image_url', 'number_of_sales', 'name', 'description',  'status']
 
 
-const Tables = () => {
+const Waiting = () => {
 
   const [modal, setModal] = useState(false)
-  const [items, setItems] = useState()
-  const [loading, setLoading] = useState(false)  // TODO: 필요할 지 판단
+  const [items, setItems] = useState(null)
   const [approveItemId, setApproveItemId] = useState()
 
   // 심사 대기 카드 리스트 조회
   const fetchItems = async () => {
     try {
-      setItems(null)
-      setLoading(true)
       const response = await apiGet('/papi/v1/templates?status=wait')
       setItems(response.data.results) // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
-    setLoading(false)
+  }
+
+  const onClose = () => {
+    setModal(false);
   }
 
   // 심사 승인 모달 창 띄우기
-  const showApproveModal = itemId => {
+  const showApproveModal = (itemId) => {
     setApproveItemId(itemId)
     setModal(true)
-  }
-
-  const approveNFT = () => {
-    apiPatch(`/papi/v1/templates/${approveItemId}/approve`)
-      .then(response => {
-        console.log('approved')
-        fetchItems()
-      })
-      .catch(error => {
-        if (!error.response && error.request) {
-          // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-          console.log('요청이 실패했습니다.')
-        }
-      })
-    setModal(false)
   }
 
   useEffect(() => {
     fetchItems()
   }, [])
 
-  const ApproveModal = () => {
-    return (
-      <CModal
-        show={modal}
-        onClose={setModal}
-      >
-        <CModalHeader closeButton>
-          <CModalTitle>심사 승인</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          Id {approveItemId} 카드 발행을 승인합니다.
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            onClick={() => approveNFT()}
-            color="primary">Approve</CButton>
-          <CButton
-            color="secondary"
-            onClick={() => setModal(false)}
-          >Cancel</CButton>
-        </CModalFooter>
-      </CModal>
-    )
-  }
-
   return (
     <>
+      <ApproveModal modal={modal}
+                    approveItemId={approveItemId}
+                    fetchItems={fetchItems}
+                    onClose={onClose}/>
       <CRow>
         <CCol xs="12" lg="12">
           <CCard>
@@ -103,7 +67,7 @@ const Tables = () => {
                   'status':
                     (item)=>(
                       <td>
-                        <CBadge onClick={() => showApproveModal(item.id)}
+                        <CBadge onClick={e => showApproveModal(item.id)}
                                 color='warning'>
                           {item.status}
                         </CBadge>
@@ -117,9 +81,6 @@ const Tables = () => {
                     ),
                 }}
               />
-
-              <ApproveModal></ApproveModal>
-
             </CCardBody>
           </CCard>
         </CCol>
@@ -129,4 +90,4 @@ const Tables = () => {
   )
 }
 
-export default Tables
+export default Waiting

@@ -1,16 +1,10 @@
-import {apiGet, apiPatch, apiPut, AUTH_ERROR_CODE} from "./Requests";
+import {apiGet, apiPut} from "./Requests";
 
 
 async function signedUrlFileUpload (signedUrl, url, file) {
-  // file upload
-  console.log('---- in signedUrlFileUpload ----')
-  console.log(signedUrl);
-  console.log(url);
-  console.log(file);
-  console.log('---------------------------------')
 
   const header = {'Content-Type': file.type,
-    'x-amz-acl': 'public-read'}
+                  'x-amz-acl': 'public-read'}
 
   try {
     const r = await apiPut(signedUrl, file,{headers: header});

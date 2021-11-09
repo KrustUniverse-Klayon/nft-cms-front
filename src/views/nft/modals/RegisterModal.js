@@ -1,4 +1,4 @@
-import {apiPostWithAuth} from "../util/Requests";
+import {apiPostWithAuth} from "../../util/Requests";
 import {
   CButton,
   CCard,
@@ -27,9 +27,12 @@ const RegisterModal = (props) => {
 
   const registerNFT = () => {
 
+    // TODO: CMS user id
+    const cmsUserId = 10020
+
     apiPostWithAuth(
       `/papi/v1/products/`,
-      '10020',
+      `{cmsUserId}`,
       {
         'template_id': props.registerItemId,
         'sale_method': saleMethod,

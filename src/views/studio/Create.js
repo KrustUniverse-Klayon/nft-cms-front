@@ -1,20 +1,18 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {apiGet, apiPatch, apiPost} from "../util/Requests";
+import {useState, useEffect, useRef} from 'react';
+import {apiPost} from "../util/Requests";
 import {fileUpload} from '../util/FileUpload';
 
 import {
-  CBadge, CButton,
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
-  CDataTable, CForm, CFormGroup, CFormText, CInput, CInputRadio, CLabel,
-  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
+  CForm, CFormGroup, CInput, CInputRadio, CLabel,
   CRow
 } from '@coreui/react'
 
-
-const Tables = () => {
+const CreateCard = () => {
 
   const defaultInputs = {
     cardName: '',
@@ -24,7 +22,7 @@ const Tables = () => {
   };
 
   const [inputs, setInputs] = useState(defaultInputs);
-  const { cardName, cardDescription, cardType, cardIssueLimit } = inputs;
+  const {cardName, cardDescription, cardType, cardIssueLimit} = inputs;
 
   const [imageFile, setImageFile] = useState('');
   const [imageFileName, setImageFileName] = useState('');
@@ -32,22 +30,22 @@ const Tables = () => {
   const [mediaFileName, setMediaFileName] = useState('');
   const [previewURL, setPreviewURL] = useState('');
   const [preview, setPreview] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const imageFileRef= useRef();
   const mediaFileRef= useRef();
 
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const inputOnChange = (e) => {
-    setErrorMsg('');
+  const handleInputOnChange = (e) => {
     const {name, value} = e.target;
+    setErrorMsg('');
     setInputs({
       ...inputs,
       [name]: value
     });
   };
 
-  const inputOnReset = () => {
+  const handleInputOnReset = () => {
+    setErrorMsg('');
     setInputs(defaultInputs);
     setImageFile('');
     setImageFileName('');
@@ -103,37 +101,7 @@ const Tables = () => {
     }
   }, [previewURL])
 
-  const handleImageFileOnChange = (event) => {    // 이미지 파일 불러오기
-    event.preventDefault();
-    let file = event.target.files[0];
-    let reader = new FileReader();
-
-    reader.onloadend = (e) => {
-      setImageFile(file);
-      setImageFileName(file.name);
-      setPreviewURL(reader.result);
-    }
-    if (file)
-      reader.readAsDataURL(file);
-  }
-
-  const handleMediaFileOnChange = (event) => {    // 미디어 파일 불러오기
-    event.preventDefault();
-    let file = event.target.files[0];
-    let reader = new FileReader();
-
-    reader.onloadend = (e) => {
-      setMediaFile(file);
-      setMediaFileName(file.name);
-    }
-    if(file)
-      reader.readAsDataURL(file);
-  }
-
   const registerTemplate = (imageUrl, mediaUrl) => {
-
-    // TODO: 실제 값으로 (설정에서)
-    const contractId = 35;
 
     let params = {
       image_url: imageUrl,
@@ -141,7 +109,7 @@ const Tables = () => {
       description: cardDescription,
       type: cardType,
       number_of_sales: cardIssueLimit,
-      contract_id: contractId,
+      contract_id: global.constants.STUDIO_CONTRACT_ID,
     };
 
     if (mediaUrl != '') {
@@ -223,7 +191,7 @@ const Tables = () => {
                     <CLabel htmlFor="text-input">카드 이름</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                    <CInput value={cardName} onChange={inputOnChange}
+                    <CInput value={cardName} onChange={handleInputOnChange}
                             name="cardName" placeholder="" />
                   </CCol>
                 </CFormGroup>
@@ -232,7 +200,7 @@ const Tables = () => {
                     <CLabel htmlFor="text-input">카드 설명</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                    <CInput value={cardDescription} onChange={inputOnChange}
+                    <CInput value={cardDescription} onChange={handleInputOnChange}
                             name="cardDescription" placeholder="" />
                   </CCol>
                 </CFormGroup>
@@ -245,7 +213,7 @@ const Tables = () => {
                     <CFormGroup variant="custom-radio" inline>
                       <CInputRadio custom id="sale-method-radio1"
                                    name="cardType"
-                                   onChange={inputOnChange}
+                                   onChange={handleInputOnChange}
                                    value="ticket"
                                    checked={cardType === 'ticket'}
                       />
@@ -254,7 +222,7 @@ const Tables = () => {
                     <CFormGroup variant="custom-radio" inline>
                       <CInputRadio custom id="sale-method-radio2"
                                    name="cardType"
-                                   onChange={inputOnChange}
+                                   onChange={handleInputOnChange}
                                    value="warranty"
                                    checked={cardType === 'warranty'}
                       />
@@ -296,15 +264,10 @@ const Tables = () => {
                     <CLabel htmlFor="text-input">카드 발급 수</CLabel>
                   </CCol>
                   <CCol xs="12" md="9">
-                    <CInput value={cardIssueLimit} onChange={inputOnChange}
+                    <CInput value={cardIssueLimit} onChange={handleInputOnChange}
                             name="cardIssueLimit" placeholder="" />
                   </CCol>
                 </CFormGroup>
-
-
-
-
-
               </CForm>
 
               <div className="mb-3 text-danger">
@@ -315,11 +278,8 @@ const Tables = () => {
                 onClick={enrollCard}
                 color="info">등록</CButton>
               <CButton
-                onClick={inputOnReset}
+                onClick={handleInputOnReset}
                 color="secondary">초기화</CButton>
-
-
-
 
             </CCardBody>
           </CCard>
@@ -344,4 +304,4 @@ const Tables = () => {
   )
 }
 
-export default Tables
+export default CreateCard

@@ -38,6 +38,7 @@ const Widgets = React.lazy(() => import('./examples/widgets/Widgets'));
 const Users = React.lazy(() => import('./examples/users/Users'));
 const User = React.lazy(() => import('./examples/users/User'));
 
+// CMS
 const StudioCreate = React.lazy(() => import('./views/studio/Create'));
 const NFTWaiting = React.lazy(() => import('./views/nft/Waiting'));
 const NFTApproved = React.lazy(() => import('./views/nft/Approved'));

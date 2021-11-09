@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const NETWORK_ERROR_CODE = 99999;
+//export const NETWORK_ERROR_CODE = 99999;
 export const AUTH_ERROR_CODE = 1004;
 
 const axiosInstance = axios.create({
@@ -101,12 +101,6 @@ function apiFormData (method, url, params, options: Options = {}) {
       'Content-Type': 'multipart/form-data',
     },
   };
-
-  console.log("In apiFormData");
-  console.log(method);
-  console.log(url);
-  console.log(data);
-  console.log(apiOptions);
 
   return callApi(() => axiosInstance[method](url, data, apiOptions));
 }
