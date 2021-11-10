@@ -3,6 +3,7 @@ import {apiGet} from "../util/Requests"
 
 import {
   CBadge,
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -12,7 +13,7 @@ import {
 } from '@coreui/react'
 
 import ApproveModal from "./modals/ApproveModal";
-const fields = ['id', 'image_url', 'number_of_sales', 'name', 'description',  'status']
+const fields = ['id', 'image_url', 'number_of_sales', 'name', 'description',  'action']
 
 
 const Waiting = () => {
@@ -64,13 +65,13 @@ const Waiting = () => {
                 itemsPerPage={10}
                 pagination
                 scopedSlots = {{
-                  'status':
+                  'action':
                     (item)=>(
                       <td>
-                        <CBadge onClick={e => showApproveModal(item.id)}
+                        <CButton onClick={e => showApproveModal(item.id)}
                                 color='warning'>
-                          {item.status}
-                        </CBadge>
+                          심사
+                        </CButton>
                       </td>
                     ),
                   'image_url':

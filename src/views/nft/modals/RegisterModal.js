@@ -28,7 +28,7 @@ const RegisterModal = (props) => {
   const registerNFT = () => {
 
     // TODO: CMS user id
-    const cmsUserId = 10020
+    const cmsUserId = 64
 
     apiPostWithAuth(
       `/papi/v1/products/`,
