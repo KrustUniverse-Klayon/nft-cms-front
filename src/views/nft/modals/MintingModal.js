@@ -13,11 +13,14 @@ const MintingModal = (props) => {
 
   // NFT 민팅 - template 에 세팅된 number_of_sales 개수 만큼
   const mintNFT = () => {
-    apiPost(`/papi/v1/nfts/mint/bulk`,{},
-      { params: {'template_id': parseInt(props.mintingItemId)}})
+    apiPost(`/papi/v1/nfts/mint`,{},
+      { params: {'template_id': props.mintingItemId,
+                         'try_of_mints': props.mintingTryNo}})
       .then(response => {
         console.log('mint success!!')
+        props.fetchMintRecords(props.mintingItemId)
       })
+    props.onClose();
   }
 
   return (
@@ -29,7 +32,7 @@ const MintingModal = (props) => {
         <CModalTitle>심사 승인</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        Id {props.mintingItemId} 카드를 민팅하시겠습니까?
+        Id {props.mintingItemId} 카드의 {props.mintingTryNo} 차수 {props.mintingCount} 개를 민팅하시겠습니까?
       </CModalBody>
       <CModalFooter>
         <CButton

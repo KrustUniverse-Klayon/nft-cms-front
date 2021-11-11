@@ -13,7 +13,6 @@ import {
 } from '@coreui/react'
 
 import ApproveModal from "./modals/ApproveModal";
-const fields = ['id', 'image_url', 'number_of_sales', 'name', 'description',  'action']
 
 
 const Waiting = () => {
@@ -61,7 +60,7 @@ const Waiting = () => {
             <CCardBody>
               <CDataTable
                 items={items}
-                fields={fields}
+                fields={['id', 'image_url', 'name', 'description',  'action']}
                 itemsPerPage={10}
                 pagination
                 scopedSlots = {{

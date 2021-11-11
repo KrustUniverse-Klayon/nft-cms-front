@@ -59,6 +59,7 @@ const RegisterModal = (props) => {
     props.onClose();
   }
 
+
   return(
     <CModal
       show={props.modal}
