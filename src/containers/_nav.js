@@ -1,6 +1,3 @@
-import React from 'react'
-import CIcon from '@coreui/icons-react'
-
 // https://coreui.io/react/demo/free/3.1.1/#/dashboard
 
 const _nav =  [

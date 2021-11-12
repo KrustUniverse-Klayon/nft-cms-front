@@ -1,16 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react'
 import {apiGet, apiPostWithAuth} from "../util/Requests"
 
 import {
-  CBadge, CButton,
+  CButton,
   CLink,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
-  CDataTable, CForm, CFormGroup, CFormText, CInput, CInputRadio, CLabel,
+  CDataTable, CForm, CFormGroup, CFormText, CInput, CLabel,
   CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
-  CRow
+  CRow, CPagination
 } from '@coreui/react'
 
 const fields = ['product_id','name', 'image_url', 'price', 'currency',
@@ -19,24 +19,29 @@ const fields = ['product_id','name', 'image_url', 'price', 'currency',
 
 const Tables = () => {
 
-  const [modal, setModal] = useState(false)
-  const [items, setItems] = useState()
-  const [loading, setLoading] = useState(false)
   const [purchaseProductId, setPurchaseProductId] = useState()
   const [userId, setUserId] = useState(10010)
+  const [modal, setModal] = useState(false)
 
-  const fetchItems = async () => {
+  const pageSize = 10
+  const [items, setItems] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(1)
+
+  const fetchItems = async (page=1) => {
     try {
       // 요청이 시작 할 때에는 error 와 users 를 초기화하고
       setItems(null);
       // loading 상태를 true 로 바꿉니다.
-      setLoading(true);
-      const response = await apiGet('/papi/v1/products')
+      const response = await apiGet(`/papi/v1/products?page=${page}&size=${pageSize}`)
       setItems(response.data.results); // 데이터는 response.data 안에 들어있습니다.
+      const paging = response.data.paging
+      setCurrentPage(paging.current_page)
+      setTotalPage(paging.total_page)
+
     } catch (e) {
       console.log(e)
     }
-    setLoading(false)
   }
 
   const showPurchaseModel = itemId => {
@@ -67,8 +72,8 @@ const Tables = () => {
   }
 
   useEffect(() => {
-    fetchItems()
-  }, [])
+    fetchItems(currentPage)
+  }, [currentPage])
 
   const TmpModal = () => {
     return (
@@ -127,8 +132,6 @@ const Tables = () => {
               <CDataTable
                 items={items}
                 fields={fields}
-                itemsPerPage={10}
-                pagination
                 scopedSlots = {{
                   'name':
                     (item)=>(
@@ -159,6 +162,12 @@ const Tables = () => {
 
                 }}
               />
+              <CPagination activePage={currentPage}
+                           align='center'
+                           limit={10}
+                           pages={totalPage}
+                           onActivePageChange={setCurrentPage}>
+              </CPagination>
 
               <TmpModal></TmpModal>
 

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import {useState, useRef} from 'react'
 import {
   CButton,
   CCard,
@@ -6,12 +6,12 @@ import {
   CCardFooter,
   CCol,
   CContainer,
-  CForm, CFormGroup,
+  CForm,
   CInput,
   CInputGroup,
   CInputGroupPrepend,
-  CInputGroupText, CLabel,
-  CRow, CValidFeedback, CInvalidFeedback, CInputGroupAppend
+  CInputGroupText,
+  CRow, CInvalidFeedback
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
@@ -99,6 +99,7 @@ const Register = () => {
     }
 
     // TODO: 가입 API 호출
+    onReset()
   }
 
   return (

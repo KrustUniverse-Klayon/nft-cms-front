@@ -2,20 +2,24 @@ import React, {useState} from "react";
 import {
   CForm,
   CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
   CCol, CCollapse,
-  CDataTable, CFormGroup, CFormText, CInput, CInputRadio, CLabel,
-  CRow
+  CDataTable, CFormGroup, CInput, CLabel,
 } from '@coreui/react';
 import {apiGet, apiPost} from "../../util/Requests";
 import RegisterModal from "./RegisterModal";
 import MintingModal from "./MintingModal";
 
+const getBadge = status => {
+  switch (status) {
+    case 'wait': return '민팅 대기'
+    case 'completed': return '민팅 완료'
+    case 'Pending': return '상품 등록 완료'
+    default: return 'primary'
+  }
+}
+
 const CustomTable = (props) => {
   const items = props.items
-  // ['id', 'image_url', 'name', 'creator_id', 'view']
 
   const [registerModal, setRegisterModal] = useState(false)
   const [mintingModal, setMintingModal] = useState(false)
@@ -27,7 +31,6 @@ const CustomTable = (props) => {
   // minting
   const [mintingTryNo, setMintingTryNo] = useState()
   const [mintingCount, setMintingCount] = useState()
-
 
   const defaultInputs = {
     saleMethod: 'single_price',
@@ -43,10 +46,6 @@ const CustomTable = (props) => {
   }
 
   const [inputs, setInputs] = useState(defaultInputs)
-
-
-
-
 
   const registerMintRecord = (itemId) => {
     apiPost(
@@ -121,6 +120,12 @@ const CustomTable = (props) => {
                     {item.created_at.slice(0, 10)}
                   </td>
                 ),
+              'status':
+                (item)=>(
+                  <td>
+                    {getBadge(item.status)}
+                  </td>
+                ),
               'action':
                 (item)=>(
                   <td>
@@ -192,16 +197,13 @@ const CustomTable = (props) => {
     for (let i = 0; i < items.length; i++) {
 
       const item = items[i];
-      console.log(i)
-      console.log(item)
-
 
       result.push(
         <tr>
           <td>{item.id}</td>
           <td><img
             src={item.image_url}
-            width="50px" height="50px"></img></td>
+            width="50px" height="50px" alt=''></img></td>
           <td>{item.name}</td>
           <td>{item.creator_id}</td>
           <td>

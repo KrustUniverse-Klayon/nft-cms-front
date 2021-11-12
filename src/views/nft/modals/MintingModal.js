@@ -7,7 +7,7 @@ import {
   CModalTitle
 } from "@coreui/react";
 
-import {apiPatch, apiPost} from "../../util/Requests";
+import {apiPost} from "../../util/Requests";
 
 const MintingModal = (props) => {
 

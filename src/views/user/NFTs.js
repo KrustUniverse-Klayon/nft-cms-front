@@ -1,41 +1,22 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import {useState, useEffect} from 'react'
 
 import {
-  CBadge, CButton,
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
   CDataTable, CForm, CFormGroup, CFormText, CInput, CInputRadio, CLabel,
-  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle,
+  CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CPagination,
   CRow
 } from '@coreui/react'
 import { DocsLink } from 'src/reusable'
 
-import {apiGetWithAuth, apiPatch, apiPostWithAuth} from "../util/Requests"
-
-
-
-const getBadge = status => {
-  switch (status) {
-    case 'Active': return 'success'
-    case 'Inactive': return 'secondary'
-    case 'Pending': return 'warning'
-    case 'Banned': return 'danger'
-    default: return 'primary'
-  }
-}
-const fields = ['name', 'description', 'image_url']
-
-
-
+import {apiGetWithAuth, apiPostWithAuth} from "../util/Requests"
 
 const Tables = () => {
 
   const [modal, setModal] = useState(false)
-  const [items, setItems] = useState()
-  const [loading, setLoading] = useState(false)
   const [userId, setUserId] = useState(10010)
   const [registerItemId, setRegisterItemId] = useState()
   const [saleMethod, setSaleMethod] = useState('single_price')
@@ -46,6 +27,10 @@ const Tables = () => {
   const [exchangeBeginDate, setExchangeBeginDate] = useState()
   const [exchangeEndDate, setExchangeEndDate] = useState()
 
+  const pageSize = 10
+  const [items, setItems] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(1)
 
   const changeSaleMethod = (e) => {
     setSaleMethod(e.target.value)
@@ -56,21 +41,19 @@ const Tables = () => {
     setModal(true)
   }
 
-  const fetchItems = async () => {
+  const fetchItems = async (userId, page=1) => {
     try {
       // 요청이 시작 할 때에는 error 와 users 를 초기화하고
       setItems(null);
       // loading 상태를 true 로 바꿉니다.
-      setLoading(true);
       const response = await apiGetWithAuth(
-        `/api/v1/users/${userId}/nfts`,
+        `/api/v1/users/${userId}/nfts?&page=${page}&size=${pageSize}`,
         `${userId}`,
         )
       setItems(response.data.items); // 데이터는 response.data 안에 들어있습니다.
     } catch (e) {
       console.log(e)
     }
-    setLoading(false)
   }
 
   const registerNFT = templateId => {
@@ -100,10 +83,10 @@ const Tables = () => {
 
   useEffect(() => {
     if (userId > 0) {
-      fetchItems();
+      fetchItems(userId, currentPage);
     }
 
-  }, []);
+  }, [userId, currentPage]);
 
 
   return (
@@ -137,25 +120,25 @@ const Tables = () => {
             <CCardBody>
               <CDataTable
                 items={items}
-                fields={fields}
-                itemsPerPage={10}
-                pagination
+                fields={['name', 'description', 'image_url']}
                 scopedSlots = {{
                   'image_url':
                     (item)=>(
                       <td>
-                        <img src={item.image_url} width='50px' height='50px' ></img>
+                        <img src={item.image_url} width='50px' height='50px' alt=''></img>
                       </td>
                     ),
 
                 }}
               />
+              <CPagination activePage={currentPage}
+                           align='center'
+                           limit={10}
+                           pages={totalPage}
+                           onActivePageChange={setCurrentPage}>
+              </CPagination>
 
-
-              <CModal
-                show={modal}
-                onClose={setModal}
-              >
+              <CModal show={modal} onClose={setModal}>
                 <CModalHeader closeButton>
                   <CModalTitle>판매 정보 입력</CModalTitle>
                 </CModalHeader>

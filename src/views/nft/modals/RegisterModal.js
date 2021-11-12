@@ -32,7 +32,7 @@ const RegisterModal = (props) => {
 
     apiPostWithAuth(
       `/papi/v1/products/`,
-      `{cmsUserId}`,
+      `${cmsUserId}`,
       {
         'template_id': props.registerItemId,
         'sale_method': saleMethod,

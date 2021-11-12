@@ -91,7 +91,7 @@ const CreateCard = () => {
   useEffect(() => {
 
     //처음 파일 등록하지 않았을 때를 방지
-    if(imageFile !== '') {
+    if(previewURL !== '') {
       setPreview(<img height="50%" src={previewURL} className="card-img-top" alt=''></img>);
     } else {
       setPreview(<div id="previewNoImage" className="card-header h-50"></div>);
@@ -112,7 +112,7 @@ const CreateCard = () => {
       contract_id: global.constants.STUDIO_CONTRACT_ID,
     };
 
-    if (mediaUrl != '') {
+    if (mediaUrl !== '') {
       params['media_url'] = mediaUrl;
       params['media_type'] = 'VIDEO';     // TODO: 타입에 맞게 변경
     }
@@ -155,7 +155,7 @@ const CreateCard = () => {
     }
 
     let files = [imageFile];
-    if (mediaFile != '') {
+    if (mediaFile !== '') {
       files.push(mediaFile);
     }
 
@@ -163,7 +163,7 @@ const CreateCard = () => {
       .then(response => {
         const urls = response;
         const imageUrl = urls[0].url;
-        const mediaUrl = mediaFile != '' ? urls[1].url : ''
+        const mediaUrl = mediaFile !== '' ? urls[1].url : ''
         registerTemplate(imageUrl, mediaUrl);
 
       })

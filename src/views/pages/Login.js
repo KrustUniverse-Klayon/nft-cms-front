@@ -89,6 +89,8 @@ const Login = () => {
     }
 
     // TODO: login API 호출
+
+    onReset()
   }
 
 
