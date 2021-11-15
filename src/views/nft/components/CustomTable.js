@@ -26,6 +26,7 @@ const CustomTable = (props) => {
 
   const [detailContent, setDetailContent] = useState()
   const [modalItemId, setModalItemId] = useState()
+  const [modalMintRecordId, setModalMintRecordId] = useState()
   const [newMintCount, setNewMintCount] = useState(1)
 
   // minting
@@ -88,6 +89,7 @@ const CustomTable = (props) => {
 
   const showRegisterModal = (item) => {
     setModalItemId(item.template_id)
+    setModalMintRecordId(item.id)
     setRegisterModal(true)
   }
 
@@ -109,7 +111,7 @@ const CustomTable = (props) => {
         setDetailContent(
           <CDataTable
             items={items}
-            fields={['try_of_mints', 'number_of_mints', 'created_at', 'status', 'action']}
+            fields={['id', 'try_of_mints', 'number_of_mints', 'created_at', 'status', 'action']}
             itemsPerPage={100}
             border={true}
             outlined={true}
@@ -225,7 +227,7 @@ const CustomTable = (props) => {
   return (
     <>
       <RegisterModal modal={registerModal}
-                     registerItemId={modalItemId}
+                     mintRecordId={modalMintRecordId}
                      onChange={onChange}
                      onClose={handleRegisterModalOnClose}
                      inputs={inputs}/>

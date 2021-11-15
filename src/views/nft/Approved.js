@@ -9,7 +9,7 @@ import {
   CRow
 } from '@coreui/react';
 
-import CustomTable from "./modals/CustomTable";
+import CustomTable from "./components/CustomTable";
 
 // ================================================
 // NFT > 상품등록

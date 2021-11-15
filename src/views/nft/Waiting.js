@@ -11,7 +11,7 @@ import {
   CRow
 } from '@coreui/react'
 
-import ApproveModal from "./modals/ApproveModal";
+import ApproveModal from "./components/ApproveModal";
 
 
 const Waiting = () => {
