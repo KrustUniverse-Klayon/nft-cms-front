@@ -18,11 +18,10 @@ const CreateCard = () => {
     cardName: '',
     cardDescription: '',
     cardType: 'ticket',
-    cardIssueLimit: 1
   };
 
   const [inputs, setInputs] = useState(defaultInputs);
-  const {cardName, cardDescription, cardType, cardIssueLimit} = inputs;
+  const {cardName, cardDescription, cardType} = inputs;
 
   const [imageFile, setImageFile] = useState('');
   const [imageFileName, setImageFileName] = useState('');
@@ -108,7 +107,6 @@ const CreateCard = () => {
       name: cardName,
       description: cardDescription,
       type: cardType,
-      number_of_sales: cardIssueLimit,
       contract_id: global.constants.STUDIO_CONTRACT_ID,
     };
 
@@ -146,8 +144,6 @@ const CreateCard = () => {
       errMsg += '카드 설명을 입력해 주세요<br />';
     if (!imageFile)
       errMsg += '디스플레이할 이미지 파일을 업로드해 주세요<br />';
-    if (!(cardIssueLimit >= 1))
-      errMsg += '카드 발급수를 1 이상의 숫자로 입력해 주세요<br />';
 
     if (errMsg !== '') {
       setErrorMsg(errMsg);
@@ -259,15 +255,6 @@ const CreateCard = () => {
                   </CCol>
                 </CFormGroup>
 
-                <CFormGroup row>
-                  <CCol md="3">
-                    <CLabel htmlFor="text-input">카드 발급 수</CLabel>
-                  </CCol>
-                  <CCol xs="12" md="9">
-                    <CInput value={cardIssueLimit} onChange={handleInputOnChange}
-                            name="cardIssueLimit" placeholder="" />
-                  </CCol>
-                </CFormGroup>
               </CForm>
 
               <div className="mb-3 text-danger">
