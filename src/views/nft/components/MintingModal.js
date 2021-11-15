@@ -9,30 +9,30 @@ import {
 
 import {apiPost} from "../../util/Requests";
 
-const MintingModal = (props) => {
+const MintingModal = ({modal, mintingItemId, mintRecordId,
+                       fetchMintRecords, onClose}) => {
 
   // NFT 민팅 - template 에 세팅된 number_of_sales 개수 만큼
   const mintNFT = () => {
     apiPost(`/papi/v1/nfts/mint`,{},
-      { params: {'template_id': props.mintingItemId,
-                         'try_of_mints': props.mintingTryNo}})
+      { params: {'mint_record_id': mintRecordId}})
       .then(response => {
         console.log('mint success!!')
-        props.fetchMintRecords(props.mintingItemId)
+        fetchMintRecords(mintingItemId)
       })
-    props.onClose();
+    onClose();
   }
 
   return (
     <CModal
-      show={props.modal}
-      onClose={props.onClose}
+      show={modal}
+      onClose={onClose}
     >
       <CModalHeader closeButton>
         <CModalTitle>심사 승인</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        Id {props.mintingItemId} 카드의 {props.mintingTryNo} 차수 {props.mintingCount} 개를 민팅하시겠습니까?
+        Id {mintingItemId} 카드의 mint_record_id {mintRecordId} 를 민팅하시겠습니까?
       </CModalBody>
       <CModalFooter>
         <CButton
@@ -40,7 +40,7 @@ const MintingModal = (props) => {
           color="primary">Yes</CButton>
         <CButton
           color="secondary"
-          onClick={() => props.onClose(false)}
+          onClick={() => onClose(false)}
         >Cancel</CButton>
       </CModalFooter>
     </CModal>

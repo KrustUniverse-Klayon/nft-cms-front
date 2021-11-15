@@ -29,7 +29,7 @@ const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
     const cmsUserId = 64
 
     apiPostWithAuth(
-      `/papi/v1/products/`,
+      `/papi/v1/products`,
       `${cmsUserId}`,
       {
         'mint_record_id': mintRecordId,

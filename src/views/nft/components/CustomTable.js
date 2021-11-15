@@ -29,10 +29,6 @@ const CustomTable = (props) => {
   const [modalMintRecordId, setModalMintRecordId] = useState()
   const [newMintCount, setNewMintCount] = useState(1)
 
-  // minting
-  const [mintingTryNo, setMintingTryNo] = useState()
-  const [mintingCount, setMintingCount] = useState()
-
   const defaultInputs = {
     saleMethod: 'single_price',
     saleCurrency: 'peb',
@@ -95,8 +91,7 @@ const CustomTable = (props) => {
 
   const showMintingModal = (item) => {
     setModalItemId(item.template_id)
-    setMintingTryNo(item.try_of_mints)
-    setMintingCount(item.number_of_mints)
+    setModalMintRecordId(item.id)
     setMintingModal(true)
   }
 
@@ -232,9 +227,8 @@ const CustomTable = (props) => {
                      onClose={handleRegisterModalOnClose}
                      inputs={inputs}/>
       <MintingModal modal={mintingModal}
+                    mintRecordId={modalMintRecordId}
                     mintingItemId={modalItemId}
-                    mintingTryNo={mintingTryNo}
-                    mintingCount={mintingCount}
                     fetchMintRecords={fetchMintRecords}
                     onClose={handleMintingModalOnClose}/>
 

@@ -125,6 +125,7 @@ const CreateCard = () => {
     )
       .then(response => {
         alert("제작하신 카드의 발급을 위해 심사가 요청 되었습니다.");
+        handleInputOnReset();
         console.log(response);
       })
       .catch(error => {

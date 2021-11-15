@@ -31,7 +31,7 @@ export async function fileUpload (files) {
 
     console.log(r);
 
-    const signedUrls = r.data.signed_urls;
+    const signedUrls = r.data.results;
     signedUrls.forEach(function (e, index, arr) {
       signedUrlFileUpload(e.signed_url, e.url, files[index]);
     });
