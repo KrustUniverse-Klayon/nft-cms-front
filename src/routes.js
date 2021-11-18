@@ -47,7 +47,7 @@ const UserNFTs = React.lazy(() => import('./views/user/NFTs'));
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/studio/create', name: '제작', component: StudioCreate },
+  { path: '/studio/create', name: 'NFT 템플릿 제작', component: StudioCreate },
   { path: '/nft/waiting', name: '심사 대기', component: NFTWaiting },
   { path: '/nft/approved', name: 'NFT Approved', component: NFTApproved },
   { path: '/market/products', name: 'Market Products', component: MarketProducts },

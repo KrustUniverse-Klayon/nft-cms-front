@@ -24,10 +24,7 @@ const MintingModal = ({modal, mintingItemId, mintRecordId,
   }
 
   return (
-    <CModal
-      show={modal}
-      onClose={onClose}
-    >
+    <CModal show={modal} onClose={onClose}>
       <CModalHeader closeButton>
         <CModalTitle>심사 승인</CModalTitle>
       </CModalHeader>
@@ -35,13 +32,12 @@ const MintingModal = ({modal, mintingItemId, mintRecordId,
         Id {mintingItemId} 카드의 mint_record_id {mintRecordId} 를 민팅하시겠습니까?
       </CModalBody>
       <CModalFooter>
-        <CButton
-          onClick={() => mintNFT()}
-          color="primary">Yes</CButton>
-        <CButton
-          color="secondary"
-          onClick={() => onClose(false)}
-        >Cancel</CButton>
+        <CButton onClick={() => mintNFT()} color="primary">
+          Yes
+        </CButton>
+        <CButton color="secondary" onClick={() => onClose(false)}>
+          Cancel
+        </CButton>
       </CModalFooter>
     </CModal>
   )

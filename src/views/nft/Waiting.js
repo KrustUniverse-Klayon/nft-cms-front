@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'
-import {apiGet} from "../util/Requests"
+import {useState, useEffect} from 'react';
+import {apiGet} from "../util/Requests";
 
 import {
   CButton,
@@ -9,32 +9,33 @@ import {
   CCol,
   CDataTable, CPagination,
   CRow
-} from '@coreui/react'
+} from '@coreui/react';
 
 import ApproveModal from "./components/ApproveModal";
 
 
 const Waiting = () => {
 
-  const [approveItemId, setApproveItemId] = useState()
-  const [modal, setModal] = useState(false)
+  const [approveItemId, setApproveItemId] = useState();
+  const [modal, setModal] = useState(false);
 
-  const pageSize = 10
-  const [items, setItems] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPage, setTotalPage] = useState(1)
+  const pageSize = 10;
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   // 심사 대기 카드 리스트 조회
   const fetchItems = async (page=1) => {
     try {
-      const response = await apiGet(`/papi/v1/templates?status=wait&page=${page}&size=${pageSize}`)
-      setItems(response.data.results) // 데이터는 response.data 안에 들어있습니다.
-      const paging = response.data.paging
-      setCurrentPage(paging.current_page)
-      setTotalPage(paging.total_page)
+      const url = `/papi/v1/templates?status=wait&page=${page}&size=${pageSize}`;
+      const response = await apiGet(url);
+      setItems(response.data.results);
+      const paging = response.data.paging;
+      setCurrentPage(paging.current_page);
+      setTotalPage(paging.total_page);
 
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 
@@ -44,18 +45,19 @@ const Waiting = () => {
 
   // 심사 승인 모달 창 띄우기
   const showApproveModal = (itemId) => {
-    setApproveItemId(itemId)
-    setModal(true)
+    setApproveItemId(itemId);
+    setModal(true);
   }
 
   useEffect(() => {
-    fetchItems(currentPage)
-  }, [currentPage])
+    fetchItems(currentPage);
+  }, [currentPage]);
 
   return (
     <>
       <ApproveModal modal={modal}
                     approveItemId={approveItemId}
+                    currentPage={currentPage}
                     fetchItems={fetchItems}
                     onClose={onClose}/>
       <CRow>
@@ -101,4 +103,4 @@ const Waiting = () => {
   )
 }
 
-export default Waiting
+export default Waiting;

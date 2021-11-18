@@ -16,30 +16,30 @@ import CustomTable from "./components/CustomTable";
 // ================================================
 const Approved = () => {
 
-  const pageSize = 10
-  const [items, setItems] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPage, setTotalPage] = useState(1)
+  const pageSize = 10;
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   const fetchItems = async (page=1) => {
     try {
-      const response = await apiGet(`/papi/v1/templates?status=approved&page=${page}&size=${pageSize}`)
-      setItems(response.data.results) // 데이터는 response.data 안에 들어있습니다.
-      const paging = response.data.paging
-      setCurrentPage(paging.current_page)
-      setTotalPage(paging.total_page)
+      const url = `/papi/v1/templates?status=approved&page=${page}&size=${pageSize}`;
+      const response = await apiGet(url);
+      setItems(response.data.results);
+      const paging = response.data.paging;
+      setCurrentPage(paging.current_page);
+      setTotalPage(paging.total_page);
 
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 
   useEffect(() => {
-    fetchItems(currentPage)
-  }, [currentPage])
+    fetchItems(currentPage);
+  }, [currentPage]);
 
   return (
-    <>
 
       <CRow>
         <CCol xs="12" lg="12">
@@ -62,7 +62,7 @@ const Approved = () => {
         </CCol>
       </CRow>
 
-    </>
+
   )
 }
 

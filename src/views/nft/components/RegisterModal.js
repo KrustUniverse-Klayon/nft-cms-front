@@ -9,19 +9,12 @@ import {
   CModalHeader,
   CModalTitle
 } from "@coreui/react";
-import React from "react";
+
 
 const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
 
-  const {
-    saleMethod,
-    salePrice,
-    saleBeginDate,
-    saleEndDate,
-    exchangeBeginDate,
-    exchangeEndDate,
-    rsAuthor,
-    rsMarket} = inputs;
+  const {saleMethod, salePrice, saleBeginDate, saleEndDate,
+         exchangeBeginDate, exchangeEndDate, rsAuthor, rsMarket} = inputs;
 
   const registerNFT = () => {
 
@@ -56,19 +49,15 @@ const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
     onClose();
   }
 
-
   return(
-    <CModal
-      show={modal}
-      onClose={onClose}
-    >
+    <CModal show={modal} onClose={onClose}>
       <CModalHeader closeButton>
         <CModalTitle>판매 정보 입력</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CCard>
           <CCardBody>
-            <CForm action="" method="post" encType="multipart/form-data" className="form-horizontal">
+            <CForm method="post" encType="multipart/form-data" className="form-horizontal">
               <CFormGroup row>
                 <CCol md="3">
                   <CLabel>판매 방식</CLabel>
@@ -81,7 +70,9 @@ const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
                                  value="single_price"
                                  checked={saleMethod === 'single_price'}
                     />
-                    <CLabel variant="custom-checkbox" htmlFor="sale-method-radio1">지정 단일가</CLabel>
+                    <CLabel variant="custom-checkbox" htmlFor="sale-method-radio1">
+                      지정 단일가
+                    </CLabel>
                   </CFormGroup>
                   <CFormGroup variant="custom-radio" inline>
                     <CInputRadio custom id="sale-method-radio2"
@@ -90,7 +81,9 @@ const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
                                  value="auction"
                                  checked={saleMethod === 'auction'}
                     />
-                    <CLabel variant="custom-checkbox" htmlFor="sale-method-radio2">경매</CLabel>
+                    <CLabel variant="custom-checkbox" htmlFor="sale-method-radio2">
+                      경매
+                    </CLabel>
                   </CFormGroup>
                   <CFormGroup variant="custom-radio" inline>
                     <CInputRadio custom id="sale-method-radio3"
@@ -99,7 +92,9 @@ const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
                                  value="bonding"
                                  checked={saleMethod === 'bonding'}
                     />
-                    <CLabel variant="custom-checkbox" htmlFor="sale-method-radio3">본딩 커브</CLabel>
+                    <CLabel variant="custom-checkbox" htmlFor="sale-method-radio3">
+                      본딩 커브
+                    </CLabel>
                   </CFormGroup>
                 </CCol>
               </CFormGroup>
@@ -208,13 +203,12 @@ const RegisterModal = ({modal, mintRecordId, inputs, onClose, onChange}) => {
 
       </CModalBody>
       <CModalFooter>
-        <CButton
-          onClick={() => registerNFT()}
-          color="primary">Register</CButton>
-        <CButton
-          color="secondary"
-          onClick={() => onClose()}
-        >Cancel</CButton>
+        <CButton onClick={() => registerNFT()} color="primary">
+          Register
+        </CButton>
+        <CButton color="secondary" onClick={() => onClose()}>
+          Cancel
+        </CButton>
       </CModalFooter>
     </CModal>
   )

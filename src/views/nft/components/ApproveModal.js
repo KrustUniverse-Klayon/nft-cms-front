@@ -9,42 +9,38 @@ import {
 
 import {apiPatch} from "../../util/Requests";
 
-const ApproveModal = (props) => {
+const ApproveModal = ({modal, approveItemId, currentPage, fetchItems, onClose}) => {
 
   const approveNFT = () => {
-    apiPatch(`/papi/v1/templates/${props.approveItemId}/approve`)
+    apiPatch(`/papi/v1/templates/${approveItemId}/approve`)
       .then(response => {
-        console.log('approved')
-        props.fetchItems()
+        console.log('approved');
+        fetchItems(currentPage);
       })
       .catch(error => {
         if (!error.response && error.request) {
           // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-          console.log('요청이 실패했습니다.')
+          console.log('요청이 실패했습니다.');
         }
       })
-    props.onClose()
+    onClose();
   }
 
   return (
-    <CModal
-      show={props.modal}
-      onClose={props.onClose}
-    >
+    <CModal show={modal} onClose={onClose}>
       <CModalHeader closeButton>
         <CModalTitle>심사 승인</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        Id {props.approveItemId} 카드 발행을 승인합니다.
+        Id {approveItemId} 카드 발행을 승인합니다.
       </CModalBody>
       <CModalFooter>
-        <CButton
-          onClick={() => approveNFT()}
-          color="primary">Approve</CButton>
-        <CButton
-          color="secondary"
-          onClick={() => props.onClose(false)}
-        >Cancel</CButton>
+        <CButton onClick={() => approveNFT()} color="primary">
+          Approve
+        </CButton>
+        <CButton color="secondary" onClick={() => onClose(false)}>
+          Cancel
+        </CButton>
       </CModalFooter>
     </CModal>
   )

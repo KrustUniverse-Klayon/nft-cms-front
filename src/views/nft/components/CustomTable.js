@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {
   CForm,
   CButton,
@@ -11,23 +11,22 @@ import MintingModal from "./MintingModal";
 
 const getBadge = status => {
   switch (status) {
-    case 'wait': return '민팅 대기'
-    case 'completed': return '민팅 완료'
-    case 'Pending': return '상품 등록 완료'
-    default: return 'primary'
+    case 'wait': return '민팅 대기';
+    case 'completed': return '민팅 완료';
+    case 'Pending': return '상품 등록 완료';
+    default: return 'primary';
   }
 }
 
-const CustomTable = (props) => {
-  const items = props.items
+const CustomTable = ({items}) => {
 
-  const [registerModal, setRegisterModal] = useState(false)
-  const [mintingModal, setMintingModal] = useState(false)
+  const [registerModal, setRegisterModal] = useState(false);
+  const [mintingModal, setMintingModal] = useState(false);
 
-  const [detailContent, setDetailContent] = useState()
-  const [modalItemId, setModalItemId] = useState()
-  const [modalMintRecordId, setModalMintRecordId] = useState()
-  const [newMintCount, setNewMintCount] = useState(1)
+  const [detailContent, setDetailContent] = useState();
+  const [modalItemId, setModalItemId] = useState();
+  const [modalMintRecordId, setModalMintRecordId] = useState();
+  const [newMintCount, setNewMintCount] = useState();
 
   const defaultInputs = {
     saleMethod: 'single_price',
@@ -40,9 +39,9 @@ const CustomTable = (props) => {
     rsAuthor: 2.5,
     rsMarket: 2.5,
     registerNumberOfSales: 1
-  }
+  };
 
-  const [inputs, setInputs] = useState(defaultInputs)
+  const [inputs, setInputs] = useState(defaultInputs);
 
   const registerMintRecord = (itemId) => {
     apiPost(
@@ -52,24 +51,24 @@ const CustomTable = (props) => {
       }
     )
       .then(response => {
-        console.log('registered')
+        console.log('registered');
         fetchMintRecords(itemId);
+        setNewMintCount();
       })
       .catch(error => {
         if (!error.response && error.request) {
           // 요청이 이루어 졌으나 응답을 받지 못했습니다.
-          console.log('요청이 실패했습니다.')
+          console.log('요청이 실패했습니다.');
         }
       })
   }
 
-
   const onChange = (e) => {
-    const {value, name} = e.target
+    const {value, name} = e.target;
     setInputs({
       ...inputs,
       [name]: value
-    })
+    });
   }
 
   const handleRegisterModalOnClose = () => {
@@ -81,27 +80,25 @@ const CustomTable = (props) => {
     setMintingModal(false);
   }
 
-
-
   const showRegisterModal = (item) => {
-    setModalItemId(item.template_id)
-    setModalMintRecordId(item.id)
-    setRegisterModal(true)
+    setModalItemId(item.template_id);
+    setModalMintRecordId(item.id);
+    setRegisterModal(true);
   }
 
   const showMintingModal = (item) => {
-    setModalItemId(item.template_id)
-    setModalMintRecordId(item.id)
-    setMintingModal(true)
+    setModalItemId(item.template_id);
+    setModalMintRecordId(item.id);
+    setMintingModal(true);
   }
 
   const fetchMintRecords = async (itemId) => {
     try {
-      const response = await apiGet(`/papi/v1/templates/${itemId}/mint-records`)
-      const items = response.data.results
+      const response = await apiGet(`/papi/v1/templates/${itemId}/mint-records`);
+      const items = response.data.results;
 
       if (items.length === 0) {
-        setDetailContent(<></>)
+        setDetailContent(<></>);
       } else {
         setDetailContent(
           <CDataTable
@@ -140,21 +137,19 @@ const CustomTable = (props) => {
           />)
       }
 
-
-
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 
-  const [accordion, setAccordion] = useState(0)
+  const [accordion, setAccordion] = useState(0);
   const showAccordion = (e) => {
-    const itemId = Number(e.target.value)
-    fetchMintRecords(itemId)
-    setAccordion(accordion === itemId ? null : itemId)
+    const itemId = Number(e.target.value);
+    fetchMintRecords(itemId);
+    setAccordion(accordion === itemId ? null : itemId);
   }
 
-  const MyCollapse = (item) => {
+  const MyCollapse = () => {
 
     return (
       <>
@@ -183,19 +178,12 @@ const CustomTable = (props) => {
 
           </CCollapse>
         </td>
-      </>)
+      </>);
   }
 
-
   const rendering = (items) => {
-    const result = [];
-
-
-    for (let i = 0; i < items.length; i++) {
-
-      const item = items[i];
-
-      result.push(
+    const result = items.map((item) => (
+      <>
         <tr>
           <td>{item.id}</td>
           <td><img
@@ -208,15 +196,14 @@ const CustomTable = (props) => {
               상세
             </CButton>
           </td>
-        </tr>);
+        </tr>
+        <tr>
+          {accordion === item.id ? <MyCollapse></MyCollapse> : null}
+        </tr>
+      </>
+    ));
 
-      result.push(
-          <tr>
-            {accordion === item.id ? <MyCollapse></MyCollapse> : null}
-          </tr>
-      )
-    }
-    return result
+    return result;
   }
 
   return (
@@ -235,34 +222,30 @@ const CustomTable = (props) => {
       <div className="position-relative table-responsive">
         <table className="table">
           <thead>
-          <tr>
-            <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
-              <div className="d-inline">Id</div>
-            </th>
-            <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
-              <div className="d-inline">Image Url</div>
-            </th>
-            <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
-              <div className="d-inline">Name</div>
-            </th>
-            <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
-              <div className="d-inline">Creator Id</div>
-            </th>
-            <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
-              <div className="d-inline">View</div>
-            </th>
-          </tr>
-
-
-
+            <tr>
+              <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
+                <div className="d-inline">Id</div>
+              </th>
+              <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
+                <div className="d-inline">Image Url</div>
+              </th>
+              <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
+                <div className="d-inline">Name</div>
+              </th>
+              <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
+                <div className="d-inline">Creator Id</div>
+              </th>
+              <th className="" style={{verticalAlign: 'middle', overflow: 'hidden'}}>
+                <div className="d-inline">View</div>
+              </th>
+            </tr>
           </thead>
           <tbody>
-          {rendering(items)}
+            {rendering(items)}
           </tbody>
         </table>
       </div>
     </>)
 }
-
 
 export default CustomTable;
